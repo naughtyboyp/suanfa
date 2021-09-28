@@ -1,18 +1,18 @@
 #include<stdio.h>
 int main()
 {
-    int a[100] = {0};
-    int b[100] = {0};
-    int c[100] = {0};
+    int a[100] = {0};//原序列
+    int b[100] = {0};//差分序列
+    int c[100] = {0};//差分序列的前缀和
     int n = 0;
     int m = 0;
     int i = 0;
     scanf("%d%d", &n, &m);
     for(i = 1; i<=n; i++)
     {
-        scanf("%d", &a[i]);
+        scanf("%d", &a[i]);//输出数据
     }
-    while(m--)
+    while(m--)//m次修改
     {
         int l = 0;
         int r = 0;
@@ -23,11 +23,11 @@ int main()
     }
     for(i = 1; i<=n; i++)
     {
-        c[i] = c[i-1] + b[i];
+        c[i] = c[i-1] + b[i];//差分序列的前缀和
     }
     for(i = 1; i<=n; i++)
     {
-        printf("%d ", a[i]+c[i]);
+        printf("%d ", a[i]+c[i]);//原序列与差分序列的和，就是所求
     }
     return 0;
 }
