@@ -1,0 +1,28 @@
+#include<stdio.h>
+int a[1010][1010];
+int s[1010][1010];
+int main()
+{
+    int n = 0;
+    int m = 0;
+    int q = 0;
+    int i = 0;
+    int j = 0;
+    scanf("%d%d%d", &n, &m, &q);
+    for(i = 1; i<=n; i++)
+    {
+        for(j = 1; j<=m; j++)
+        {
+            scanf("%d", &a[i][j]);//存入数据
+            s[i][j] = s[i-1][j]+ s[i][j-1] - s[i-1][j-1]+ a[i][j];//计算从左上角到第i行第j列的和
+        }
+    }
+    for(i = 0; i<q; i++)
+    {
+        int x1,x2,y1,y2;
+        scanf("%d%d%d%d", &x1, &y1, &x2, &y2);//输入坐标
+        int ans = s[x2][y2]- s[x1-1][y2]- s[x2][y1-1]+ s[x1-1][y1-1];//计算区间内的前缀和
+        printf("%d\n", ans);
+    }
+    return 0;
+}
