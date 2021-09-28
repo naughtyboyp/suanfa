@@ -1,0 +1,23 @@
+#include<stdio.h>
+int main()
+{
+    int x[105];
+    int n = 0;
+    int m = 0;
+    int i = 0;
+    scanf("%d%d", &n, &m);
+    while(m--)//多次修改不同的区间
+    {
+        int l = 0;
+        int r = 0;
+        int k = 0;
+        scanf("%d%d%d", &l, &r, &k);
+        x[l]+=k;
+        x[r+1]-=k;
+    }
+    for(i = 1; i<=n; i++)//用前缀和求出修改后的数组
+    {
+        x[i] = x[i-1]+x[i];
+    }
+    return 0;
+}
