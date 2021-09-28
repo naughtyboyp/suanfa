@@ -1,39 +1,33 @@
 #include<stdio.h>
-
-int s[100];
-void insert(int l, int r, int c)
-{
-    s[l]+=c;
-    s[r+1]-=c;
-}
-
 int main()
 {
-    int q[100] ;
+    int a[100] = {0};
+    int b[100] = {0};
+    int c[100] = {0};
     int n = 0;
     int m = 0;
     int i = 0;
     scanf("%d%d", &n, &m);
     for(i = 1; i<=n; i++)
     {
-        scanf("%d", &q[i]);
-        insert(i, i, q[i]);//把q的差分序列存入s
+        scanf("%d", &a[i]);
     }
     while(m--)
     {
         int l = 0;
         int r = 0;
-        int c =0;
+        int c = 0;
         scanf("%d%d%d", &l, &r, &c);
-        insert(l, r, c);
+        b[l]+=c;
+        b[r+1]-=c;
     }
     for(i = 1; i<=n; i++)
     {
-        s[i]+=s[i-1];//s数组的前缀和即是原序列  联系上面被修改的值
+        c[i] = c[i-1] + b[i];
     }
     for(i = 1; i<=n; i++)
     {
-        printf("%d", s[i]);
+        printf("%d ", a[i]+c[i]);
     }
     return 0;
 }
