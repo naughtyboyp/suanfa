@@ -1,0 +1,41 @@
+#include<stdio.h>
+unsigned long long  fastmul(unsigned long long  a,unsigned long long  b,unsigned long long  c)
+{
+    unsigned long long ans = 0;
+    while(b)
+    {
+        if(b & 1)
+        {
+            ans = (ans + a)%c;
+        }
+        b >>= 1;
+        a = (a+a)%c;
+    }
+    return ans;
+}
+unsigned long long fastpower(unsigned long long  base, unsigned long long  power, unsigned long long  mod)
+{
+    unsigned long long result = 1;
+    base %= mod;
+    while(power)
+    {
+        if(power & 1 )
+        {
+            result = fastmul(result, base, mod);
+        }
+        power >>= 1;
+        base = fastmul(base , base,mod);
+    }
+    return result;
+}
+int main()
+{
+    unsigned long long  a = 0;
+    unsigned long long  b = 0;
+    unsigned long long  c = 0;
+    while(~scanf("%llu%llu%llu", &a, &b, &c))
+    {
+        printf("%llu\n", fastpower(a, b, c));
+    }
+    return 0;
+}
