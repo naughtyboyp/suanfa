@@ -1,0 +1,74 @@
+分班
+TimeLimit:1000MS  MemoryLimit:128MB
+64-bit integer IO format:%lld
+Problem Description
+Morning_X老师给n个学生分班。他要把这批学生分为两个班，然而这个老师贼菜，他不知道怎么分最好，于是他想了个贼菜的方法，他先让学生排成一列并报上自己的数学成绩。
+
+然后他找一个位置把这一列切成两个部分，前面的部分分到1班，后面的部分到2班。为了使分班具有一定的合理性，要使得两个班各自的数学成绩的和尽量接近。然而这个老师太
+
+菜了，找了半天都找不到合适的位置切下去。所以他现在来找你帮忙了。
+
+问：为啥我用abs()时会CE
+
+答： 在GC++中，abs()位于头文件 stdlib.h中,不在math.h里，最好 stdlib.h和math.h两个头文件都打上
+
+
+
+Input
+输入的第一行是一个整数T代表有T组数据
+
+每组数据第一行是一个整数n代表，人数
+
+接下一行有n个数字,代表n个人排成一列后，每个人所报出的自己的数学成绩
+
+1<=n<=1000
+
+0<=数学成绩<=150
+
+
+
+Output
+输出两个班数学成绩和的差值（取绝对值）的最小值，每个结果占一行
+
+SampleInput
+2
+5
+69 20 24 65 9
+7
+101 45 80 130 2 28 75
+SampleOutput
+9
+9
+
+
+#include <stdio.h>
+#include <stdlib.h>
+int main()
+{
+    int t = 0;
+    scanf("%d", &t);
+    while(t--)
+    {
+        int score[1005] = {0};//学生前缀和
+        int n = 0;
+        scanf("%d", &n);
+        int i = 0;
+        for(i = 1; i <=n; i++)
+        {
+            scanf("%d", &score[i]);
+            score[i]+=score[i-1];
+        }
+        int d = 0;//差
+        int min = 9999999;
+        for(i = 1; i<=n; i++)
+        {
+            d = abs(score[n] - score[i] - score[i]);//i-n名学生的成绩总和 -  1-i名学生的成绩总和
+            if(min > d)
+            {
+                min = d;
+            }
+        }
+        printf("%d\n", min);
+    }
+    return 0;
+}
