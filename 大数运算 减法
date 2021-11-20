@@ -1,0 +1,117 @@
+蝈蝈的a-b（middle）
+TimeLimit:1000MS  MemoryLimit:64MB
+64-bit integer IO format:%lld
+已解决 | 点击收藏
+Problem Description
+顾名思义，输入整数 a 和 b，输出 a - b 
+
+Input
+输入一行两个整数 a 和 b（1 ≤ lena，lenb ≤ 1e5，其中 lena 和 lenb 分别为数字 a 和 b 的长度，数字 a 和 b 均为非负数，且不会带前缀 0，除非该数字本身就是 0）
+
+Output
+输出一行表示答案（请不要带前缀 0，除非输出的数字本身就是 0）
+
+SampleInput
+1 2
+SampleOutput
+-1
+
+
+
+
+#include<stdio.h>
+#include<string.h>
+//大数减法妙的地方
+//1.用字符串存储大数
+//2.将字符转为数字，倒序存入数组，倒序用的很妙
+//3.倒序后可以巧妙处理位数不同时的情况具体看注释，只要传入较长的位数即可
+
+int z[100005];//
+void sub(int* x, int* y, int len)//默认x是较大数
+{
+    int i = 0;
+    int j = 0;
+    for(i = 0; i<len; i++)//100 - 9 就内存布局是 001 - 900 得出 190
+    {
+        if(x[i] - y[i] >= 0)//这种情况直接减
+        {
+            z[i] = x[i] - y[i];
+        }
+        else
+        {
+            z[i] = x[i] +10 - y[i];//借10
+            x[i+1]-=1;//下一位减1
+        }
+    }
+    for(i = len-1; i>0; i--)//既然是减法，z的最多位数也就是len,最少是1，所以假设他有最多位数len,如果没有len位，那比实际位数多的那部分肯定就是0，然后删去多余的前缀0即可,len最少都得是1
+    {
+        if(z[i] == 0)
+        {
+            len--;
+        }
+        else
+        {
+            break;
+        }
+    }
+    for(i = len-1; i >=0; i--)
+    {
+        printf("%d", z[i]);
+    }
+}
+int main()
+{
+    char a[100005] = {0};//用字符串将大数进行存储
+    char b[100005] = {0};
+    int x[100005] = {0};
+    int y[100005] = {0};
+    scanf("%s%s", a, b);
+    int len1 = strlen(a);
+    int len2 = strlen(b);
+    int i = 0;
+    int k = 0;
+    for(i = len1-1, k = 0; i>=0; i--)//将字符串的字符转换为数字，并倒序存入数组里
+    {
+        x[k++] = a[i] - '0';
+    }
+    for(i = len2-1, k = 0; i>=0; i--)//将字符串的字符转换为数字，并倒序存入数组里
+    {
+        y[k++] = b[i] - '0';
+    }
+    //设个函数默认 大数减去小数，可以有效处理负号的情况,学到没？
+    if(len1 > len2)//相当正常
+    {
+        sub(x, y, len1);
+    }
+    else if(len1 < len2)//小了
+    {
+        printf("-");
+        sub(y, x, len2);
+    }
+    else//位数相同
+    {
+        for(i = len1 -1; i>=0; i--)//位数相同，len1 len2用谁都一样,从最高位开始比
+        {
+            if(x[i] == y[i])
+            {
+                if(i == 0)//能到达这步说明两个数完全一样
+                {
+                    printf("0");
+                }
+                continue;
+            }
+            if(x[i] > y[i])//x大
+            {
+                sub(x, y, len1);
+                break;
+            }
+            else // y[i]大
+            {
+                printf("-");
+                sub(y, x, len2);
+                break;
+            }
+        }
+    }
+    return 0;
+}
