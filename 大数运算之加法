@@ -1,0 +1,105 @@
+简单求和
+TimeLimit:1000MS  MemoryLimit:64MB
+64-bit integer IO format:%lld
+已解决 | 点击收藏
+Problem Description
+题目很简单，输入两个数，求和
+
+Input
+第一行输入一个整数T（T<=10）
+
+接下来T行输入两个数a和b（a和b的长度都不大于20且都为正整数）
+
+
+
+Output
+输出a+b的和
+
+SampleInput
+2
+1 1
+5 5
+SampleOutput
+2
+10
+
+
+#include<stdio.h>
+#include<string.h>
+int z[100005];//
+void add(int* x, int* y, int len)//默认len是位数最大的数的位数
+{
+    int i = 0;
+    int j = 0;
+    for(i = 0; i<=len; i++)//算到len+1位，加法位数最多就len+1位
+    {
+        if(x[i] + y[i] >= 10)//补个
+        {
+            z[i] = x[i] + y[i] - 10;
+            x[i+1]+=1;
+        }
+        else
+        {
+            z[i] = x[i] + y[i];//加上
+        }
+    }
+    if(z[len]!= 0 )//说明位数最高位进位 长度+1
+    {
+        len++;
+    }
+    /*for(i = len-1; i>0; i--)//大数加法不出现前缀0的情况
+    {
+        if(z[i] == 0)
+        {
+            len--;
+        }
+        else
+        {
+            break;
+        }
+    }*/
+    for(i = len-1; i >=0; i--)
+    {
+        printf("%d", z[i]);
+    }
+    printf("\n");
+}
+int main()
+{
+    int t = 0;
+    scanf("%d", &t);
+    while(t--)
+    {
+        char a[21] = {0};//用字符串将大数进行存储
+        char b[21] = {0};
+        int x[21] = {0};
+        int y[21] = {0};
+        scanf("%s%s", a, b);
+        int len1 = strlen(a);
+        int len2 = strlen(b);
+        int i = 0;
+        int k = 0;
+        for(i = len1-1, k = 0; i>=0; i--)//将字符串的字符转换为数字，并倒序存入数组里
+        {
+            x[k++] = a[i] - '0';
+        }
+        for(i = len2-1, k = 0; i>=0; i--)//将字符串的字符转换为数字，并倒序存入数组里
+        {
+            y[k++] = b[i] - '0';
+        }
+        //当然要先传位数大的数
+        if(len1 > len2)//相当正常
+        {
+            add(x, y, len1);
+        }
+        else if(len1 < len2)//
+        {
+            add(y, x, len2);
+        }
+        else//位数相同
+        {
+            add(x, y, len1);
+        }
+    }
+    return 0;
+}
