@@ -20,29 +20,24 @@ SampleOutput
 24
 1
 
+
+总结：1.还没开始的时候直接把数处理掉进行取模，下面运算会少很多，这个很关键
+2.a*2换成位运算 a <<= 1
 #include <stdio.h>
 #include <stdlib.h>
-//本题关键点在于取模的地方，一定记得取模要开头的地方取模，然后取模运算换成减法更快
 unsigned long long int fastmul(unsigned long long int a, long long int b,unsigned long long int N)
 {
-    a%=N;//开始的时候直接处理掉，下面少算很多
+    a%=N;//相当关键的一步，开头处理运算数据，能大量减少计算
     unsigned long long ans = 0;
     while(b)
     {
         if(b & 1)
         {
-            ans = (ans + a);
-            if(ans >= N)//取模运算换成 减法更快一点
-            {
-                ans-=N;
-            }
+            ans = (ans + a)%N;
         }
         b >>= 1;
-        a <<= 1;//a换成位运算 速度更快
-        if(a >= N)//取模运算换成 减法更快一点
-        {
-            a-=N;
-        }
+        a <<= 1;//a*2
+        a%=N;
     }
     return ans;
 }
@@ -53,7 +48,7 @@ unsigned long long int fastpower(unsigned long long int base, long long int powe
     {
         if(power & 1)
         {
-            ans = fastmul(ans, base, N);//快速乘的时候已经取模
+            ans = fastmul(ans, base, N);//这一步幂的运算很容易乘很大，防止爆掉
         }
         power >>= 1;
         base = fastmul(base, base, N);
@@ -62,7 +57,6 @@ unsigned long long int fastpower(unsigned long long int base, long long int powe
 }
 int main()
 {
-
     unsigned long long int a = 0;
     unsigned long long int b = 0;
     unsigned long long int mod = 0;
