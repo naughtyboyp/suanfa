@@ -33,11 +33,18 @@ unsigned long long int fastmul(unsigned long long int a, long long int b,unsigne
     {
         if(b & 1)
         {
-            ans = (ans + a)%N;
+            ans = (ans + a);
+            if(ans >= N)//减法取模更快
+            {
+                ans-=N;
+            }
         }
         b >>= 1;
         a <<= 1;//a*2
-        a%=N;
+        if(a >= N)
+        {
+            a-=N;
+        }
     }
     return ans;
 }
