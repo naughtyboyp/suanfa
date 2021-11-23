@@ -1,0 +1,74 @@
+A^B mod C
+TimeLimit:1000MS  MemoryLimit:32MB
+64-bit integer IO format:%lld
+已解决 | 点击收藏 | 已有8人收藏了本题
+Problem Description
+Given A,B,C, You should quickly calculate the result of A^B mod C. (1<=A,B,C<2^63).
+
+Input
+There are multiply testcases. Each testcase, there is one line contains three integers A, B and C, separated by a single space.
+
+Output
+For each testcase, output an integer, denotes the result of A^B mod C.
+
+SampleInput
+1000000008 10000000000000 1000000007
+2 10 1000
+3 2 4
+SampleOutput
+1
+24
+1
+
+#include <stdio.h>
+#include <stdlib.h>
+//本题关键点在于取模的地方，一定记得取模要开头的地方取模，然后取模运算换成减法更快
+unsigned long long int fastmul(unsigned long long int a, long long int b,unsigned long long int N)
+{
+    a%=N;//开始的时候直接处理掉，下面少算很多
+    unsigned long long ans = 0;
+    while(b)
+    {
+        if(b & 1)
+        {
+            ans = (ans + a);
+            if(ans >= N)//取模运算换成 减法更快一点
+            {
+                ans-=N;
+            }
+        }
+        b >>= 1;
+        a <<= 1;//a换成位运算 速度更快
+        if(a >= N)//取模运算换成 减法更快一点
+        {
+            a-=N;
+        }
+    }
+    return ans;
+}
+unsigned long long int fastpower(unsigned long long int base, long long int power,unsigned long long int N)
+{
+    unsigned long long int ans = 1;
+    while(power)
+    {
+        if(power & 1)
+        {
+            ans = fastmul(ans, base, N);//快速乘的时候已经取模
+        }
+        power >>= 1;
+        base = fastmul(base, base, N);
+    }
+    return ans;
+}
+int main()
+{
+
+    unsigned long long int a = 0;
+    unsigned long long int b = 0;
+    unsigned long long int mod = 0;
+    while(~scanf("%llu%llu%llu", &a, &b, &mod))
+    {
+        printf("%llu\n", fastpower(a,b,mod));
+    }
+    return 0;
+}
