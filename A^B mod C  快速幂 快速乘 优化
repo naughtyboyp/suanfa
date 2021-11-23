@@ -23,6 +23,7 @@ SampleOutput
 
 总结：1.还没开始的时候直接把数处理掉进行取模，下面运算会少很多，这个很关键
 2.a*2换成位运算 a <<= 1
+3.减法取模更快
 #include <stdio.h>
 #include <stdlib.h>
 unsigned long long int fastmul(unsigned long long int a, long long int b,unsigned long long int N)
