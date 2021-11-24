@@ -80,3 +80,58 @@ int main()
     }
     return 0;
 }
+
+
+
+
+
+#include <iostream>
+#include <cstdio>
+#define N 10007
+using namespace std;
+typedef long long LL;
+
+LL power(LL a, int b, int p)  //要用long long啊啊
+{///快速幂模，p为素数时，a关于mod p的逆元为a^(p-2)mod p
+    LL ans = 1;   //要用long long啊啊
+    while(b > 0)
+    {
+        if(b&1)  //a是奇数
+            ans = ans*a%p;
+        b >>= 1;
+        a = a*a%p;
+    }
+    return ans%p;
+}
+
+LL ext_gcd(int a, int b, int &x, int &y)
+{///扩展欧几里得求逆元，普遍的求法
+    if(b == 0)
+    {
+        x = 1;
+        y = 0;
+        return a;
+    }
+    int r = ext_gcd(b, a%b, x, y);
+    int temp = x;      //扩展欧几里得的推导
+    x = y;
+    y = temp - a/b*y;
+    return r;
+}
+
+int main()
+{
+    int t,x,y;
+    int n, b;
+    cin >> t;
+    while(t--)      //注意看题！别总犯低级错误！
+    {
+        scanf("%d%d", &n, &b);
+        //cout << (n%N*power(b, N-2, N))%N << endl;
+        ext_gcd(b, N, x, y);  //N不用加负号
+        if(x < 0) x += N;     //要加模的数n，防止是负数
+        cout << (n%N*x%N)%N << endl;
+    }
+
+    return 0;
+}
