@@ -1,0 +1,82 @@
+C~K的难题
+TimeLimit:1000MS  MemoryLimit:64MB
+64-bit integer IO format:%lld
+已解决 | 点击收藏
+Problem Description
+众所周知 C~K 喜欢数学，但是他最近被一个题给难住了，题目是这样的。 
+要求 (A/B)%10007，但由于 A 很大，我们只给出 n (n = A%10007)（我们给定的A必能被B整除，且 gcd(B,10007) = 1）。 
+你能帮助他解答吗？他会很感谢你的。
+
+Input
+数据的第一行是一个 T，表示有 T 组数据。 
+每组数据有两个数 n (0 <= n < 10007) 和 B (1 <= B <= 10^9)。
+
+Output
+对应每组数据输出 (A/B)%10007。
+
+SampleInput
+2 
+1000 53 
+87 123456789
+SampleOutput
+8893 
+7424
+
+
+关于逆元  看文章去
+
+模p意义下，一个数a如果有逆元x，那么除以a相当于乘以x。
+在模n的意义下，a存在逆元的充要条件是**n不等于1，且（a，n）互质。
+
+给定模数n，求a的逆元x
+即
+
+ax=1(mod n)
+=》
+ax-ny=1  
+所以可用扩展欧几里得， 
+
+ax+by=gcd（a，b）求逆元，即求x的值。
+求一组 x 和 y 使得：a*x + b*y = gcd ，是否发现了什么？
+  这里：
+        a*x + b*y == a*y1 + b*(x1 – a/b*y1)
+        x = y1
+        y = x1 – a/b*y1
+
+#include <iostream>
+#include<stdio.h>
+#include<string.h>
+#define N 10007
+int extgcd(int a, int b, int* x, int* y)
+{
+    if(b == 0)
+    {
+        *x = 1;
+        *y = 0;
+        return a;
+    }
+    extgcd(b, a%b, x, y);
+    int temp = *x;//具体看文章
+    *x = *y;
+    *y = temp - a/b*(*y);//逆元运算
+}
+int main()
+{
+    int t = 0;
+    scanf("%d", &t);
+    while(t--)
+    {
+        int n = 0;
+        int b = 0;
+        scanf("%d%d", &n, &b);
+        int x = 0;//b的逆元
+        int y = 0;
+        extgcd(b, N, &x, &y);
+        if(x < 0)//防止逆元是负数的情况
+        {
+            x+=N;
+        }
+        printf("%d\n", n*x%N);
+    }
+    return 0;
+}
