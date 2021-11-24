@@ -33,7 +33,8 @@ SampleOutput
 5
 
 
-
+总结，这种题目 一定要注意特判点  就是下面的那一个
+当你卡住的时候就要想到特判
 #include <iostream>
 #include<stdio.h>
 #include<string.h>
@@ -63,7 +64,7 @@ int main()
             x = y;
             y = temp;
         }
-        if(flag[x][y] == 0)//排除掉出现过的两头牛牛
+        if(flag[x][y] == 0)//排除掉出现过的两头牛牛  一定要注意特判！！！！
         {
             flag[x][y] = 1;
             b[x+1]-=1;
