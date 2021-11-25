@@ -1,0 +1,114 @@
+Solving Order
+TimeLimit:1000MS  MemoryLimit:32768KB
+64-bit integer IO format:%I64d
+已解决 | 点击收藏
+Problem Description
+Welcome to HDU to take part in the first CCPC girls' competition!
+
+
+
+
+As a pretty special competition, many volunteers are preparing for it with high enthusiasm.
+One thing they need to do is blowing the balloons.
+
+Before sitting down and starting the competition, you have just passed by the room where the boys are blowing the balloons. And you have found that the number of balloons of different colors are strictly different.
+
+After thinking about the volunteer boys' sincere facial expressions, you noticed that, the problem with more balloon numbers are sure to be easier to solve.
+
+Now, you have recalled how many balloons are there of each color.
+Please output the solving order you need to choose in order to finish the problems from easy to hard.
+You should print the colors to represent the problems.
+Input
+The first line is an integer T which indicates the case number.
+
+And as for each case, the first line is an integer n, which is the number of problems.
+
+Then there are n lines followed, with a string and an integer in each line, in the i-th line, the string means the color of ballon for the i-th problem, and the integer means the ballon numbers.
+
+
+
+It is guaranteed that:
+
+T is about 100.
+
+1≤n≤10.
+
+1≤ string length ≤10.
+
+1≤ bolloon numbers ≤83.(there are 83 teams :p)
+
+For any two problems, their corresponding colors are different.
+
+For any two kinds of balloons, their numbers are different.
+
+Output
+For each case, you need to output a single line.
+
+There should be n strings in the line representing the solving order you choose.
+
+Please make sure that there is only a blank between every two strings, and there is no extra blank.
+
+SampleInput
+3
+3
+red 1
+green 2
+yellow 3
+1
+blue 83
+2
+red 2
+white 1
+SampleOutput
+yellow green red
+blue
+red white
+
+
+看样例猜题意 注意最后强调了没有多余空格
+
+本题用结构体排序就好
+#include <iostream>
+#include<stdio.h>
+#include<string.h>
+#include<algorithm>
+using namespace std;
+struct balloon
+{
+    char color[15];
+    int num;
+}a[15];
+int comp(balloon x, balloon y)
+{
+    return x.num > y.num;
+}
+int main()
+{
+    int t = 0;
+    scanf("%d", &t);
+    while(t--)
+    {
+        int n = 0;
+        scanf("%d", &n);
+        int i = 0;
+        for(i = 0; i<n; i++)
+        {
+            scanf("%s", a[i].color);
+            scanf("%d", &a[i].num);
+        }
+        sort(a, a+n,comp);
+        for(i = 0; i<n; i++)
+        {
+            if(i == 0)
+            {
+                printf("%s", a[i].color);
+            }
+            else
+            {
+                printf(" %s", a[i].color);
+            }
+        }
+        printf("\n");
+    }
+    return 0;
+}
