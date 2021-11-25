@@ -1,0 +1,112 @@
+一种排序
+TimeLimit:1000MS  MemoryLimit:64MB
+64-bit integer IO format:%lld
+已解决 | 点击收藏
+Problem Description
+现在有很多长方形，每一个长方形都有一个编号，这个编号可以重复；还知道这个长方形的宽和长，编号、长、宽都是整数；现在要求按照一下方式排序（默认排序规则都是从小到大）；
+
+
+
+1.按照编号从小到大排序
+
+
+
+2.对于编号相等的长方形，按照长方形的长排序
+
+
+
+3.如果编号和长都相同，按照长方形的宽排序
+
+
+
+4.如果编号、长、宽都相同，就只保留一个长方形用于排序,删除多余的长方形
+
+
+
+最后排好序按照指定格式显示所有的长方形
+
+Input
+第一行有一个整数 0<n<100000,表示接下来有n个长方形；
+
+接下来的n行，每一行有三个数 ，第一个数表示长方形的编号，第二个和第三个数值大的表示长，数值小的表示宽，相等说明这是一个正方形（数据约定长宽与编号都小于100000且都为正整数）；
+
+Output
+顺序每行依次输出所有符合条件的长方形的 编号 长 宽
+
+SampleInput
+8
+1 1 1
+1 1 1
+1 1 2
+1 2 1
+1 2 2
+2 1 1
+2 1 2
+2 2 1
+SampleOutput
+1 1 1
+1 2 1
+1 2 2
+2 1 1
+2 2 1
+
+
+
+
+
+#include<stdio.h>
+#include<algorithm>
+using namespace std;
+struct angle
+{
+    int l;
+    int w;
+    int num;
+}a[100005];
+int comp1(angle x, angle y)//结构体排序规则
+{
+    if(x.num == y.num)
+    {
+        if(x.l == y.l)
+        {
+            return x.w < y.w;
+        }
+        else
+        {
+            return x.l < y.l;
+        }
+    }
+    else
+    {
+        return x.num < y.num;
+    }
+}
+int main()
+{
+    int n = 0;
+    scanf("%d", &n);
+    int i = 0;
+    for(i = 1; i<=n; i++)
+    {
+        scanf("%d", &a[i].num);
+        int x = 0;
+        int y = 0;
+        scanf("%d%d", &x, &y);
+        a[i].l = max(x,y);
+        a[i].w = min(x,y);
+    }
+    sort(a+1,a+n+1,comp1);//给我注意点！！！！注意上面从哪里开始的！！！！
+    for(i = 1; i<=n; i++)
+    {
+        if(a[i].num == a[i-1].num && a[i].l == a[i-1].l && a[i].w == a[i-1].w)
+        {
+            ;
+        }
+        else
+        {
+            printf("%d %d %d", a[i].num, a[i].l, a[i].w);
+            printf("\n");
+        }
+    }
+    return 0;
+}
