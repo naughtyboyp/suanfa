@@ -1,0 +1,79 @@
+
+QQ的多项式
+TimeLimit:1000MS  MemoryLimit:128MB
+64-bit integer IO format:%lld
+Problem Description
+有一个多项式(a+b)n，现在给你一个n m a b，求该多项式的第m项的值。
+
+（含a0为该多项式的第1项，含a1为该多项式的第2项·········含am-1为该多项式第m项）
+
+Input
+多行输入 ，每行一个四个整数 n,m,a,b
+
+1<=n<=30,m<=n,1<=a,b<=20.
+
+答案对1e9+7取模。
+
+Output
+输出该多项式第m项
+
+SampleInput
+3 2 4 2
+SampleOutput
+48
+Hint:
+多项式展开为 1*4^0*2^3 + 3*4^1*2^2 + 3*4^2*2 + 1*4^3*2^0
+第二项的值为48
+
+
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+#include<string.h>
+# define N 1000000007
+//Comb(n,m) = n!/(n-m)!m!
+//Comb(n,m) = comb(n-1,m-1) + comb(n-1,m)  结论   发现与杨辉三角很像
+long long fastpower(long long int base, long long int power)
+{
+    long long int ans = 1;
+    while(power)
+    {
+        if(power & 1)
+        {
+            ans = ans * base%N;
+        }
+        power >>= 1;
+        base= base*base%N;
+    }
+    return ans;
+}
+long long comb[40][40];
+int main()
+{
+    int i = 0;
+    int j = 0;
+    for(i = 0; i<=36; i++)//预处理边界 都是 1
+    {
+        comb[i][i] = 1;
+        comb[i][0] = 1;
+    }
+    for(i = 1; i<=36; i++)
+    {
+        for(j = 1; j<i; j++)
+        {
+            comb[i][j] = comb[i-1][j-1] + comb[i-1][j];//组合式公式推论  发现 就是个杨辉三角  
+        }
+    }
+    int n = 0;
+    int m = 0;
+    long long int a = 0;
+    long long int b = 0;
+    while(~scanf("%d%d%lld%lld", &n, &m, &a, &b))
+    {
+        long long int pa = fastpower(a,m-1);
+        long long int pb = fastpower(b,n-m+1);
+        printf("%lld\n", pa*pb%N*comb[n][m-1]%N);
+    }
+    return 0;
+}
