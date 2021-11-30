@@ -1,0 +1,111 @@
+文章链接CSDN  
+唯一分解定理又称算术基本定理，指：一个大于一的正整数N都可以唯一分解成有限个质数的乘积
+N=p1a1 * p2a2 * p3a3 * … * pnan，这里p1< p2< p3 <…< pn均为质数，ai均为正整数.这样的式子成为N的标准分解式
+
+一个数的标准分解式不会太长，因为1，2，3，5，7，11，13，17，19，23就这几个数乘积就超过1e8了
+所以可以不用欧拉筛  直接  暴力解出 1-50的素数就行   但我还是用了
+
+#include <stdio.h>
+#include<string.h>
+#include<math.h>
+int vis[666];
+int prime[666];
+int k = 0;
+int p[666];
+int b[666];
+int l = 0;
+//一个数的标准分解式不会太长，因为1，2，3，5，7，11，13，17，19，23就这几个数乘积就超过1e8了，所以可以不用欧拉筛
+void Eulersieve(int n)//求出素数表，  
+{
+    int i = 0;
+    int j = 0;
+    for(i = 2; i<=n; i++)
+    {
+        if(vis[i] == 0)
+        {
+            prime[k++] = i;
+        }
+        for(j = 0; j<k; j++)
+        {
+            if(i*prime[j] > n)
+            {
+                break;
+            }
+            vis[i*prime[j]] = 1;
+            if(i%prime[j] == 0)
+            {
+                break;
+            }
+        }
+    }
+
+}
+void getpb(int n)
+{
+    memset(p, 0, sizeof(p));
+    memset(b, 0, sizeof(b));
+    int i = 0;
+    for(i = 0; i < k && prime[i]<=sqrt(n); i++)//预处理优化一下  prime[i] > sqrt(n) 
+    {
+        int e = 0;
+        if(n % prime[i] == 0)
+        {
+            while(n%prime[i] == 0)
+            {
+                e++;
+                n/=prime[i];
+            }
+            b[l] = prime[i];//得到底数
+            p[l] = e;//得到指数
+            l++;
+        }
+    }
+    if(n > 1)//当n>1时n一定也是质数且其一定大于sqrt(n)所以其指数一定为1
+    {
+        p[l] = 1;
+        b[l] = n;
+    }
+}
+int main()
+{
+    Eulersieve(666);
+    long long n = 0;
+    scanf("%lld", &n);
+    printf("%lld=", n);
+    if(n == 1)
+    {
+        printf("1");
+    }
+    else
+    {
+        getpb(n);
+        int i = 0;
+        for(i = 0; i <=l &&p[i]!=0 ; i++)//当n到最后不是1的时候
+        {
+            if(p[i]!=1)
+            {
+                if(i == 0)
+                {
+                    printf("%d^%d", b[i], p[i]);
+                }
+                else
+                {
+                    printf("*%d^%d", b[i], p[i]);
+                }
+            }
+            else
+            {
+
+                if(i == 0)
+                {
+                    printf("%d", b[i]);
+                }
+                else
+                {
+                    printf("*%d", b[i]);
+                }
+            }
+        }
+    }
+    return 0;
+}
