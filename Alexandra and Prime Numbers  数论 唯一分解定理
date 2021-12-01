@@ -1,0 +1,96 @@
+Alexandra and Prime Numbers
+TimeLimit:1000MS  MemoryLimit:32768KB
+64-bit integer IO format:%I64d
+已解决 | 点击收藏 | 已有3人收藏了本题
+Problem Description
+Alexandra has a little brother. He is new to programming. One day he is solving the following problem: Given an positive integer N, judge whether N is prime.
+The problem above is quite easy, so Alexandra gave him a new task: Given a positive integer N, find the minimal positive integer M, such that N/M is prime. If such M doesn't exist, output 0.
+Help him!
+Input
+There are multiple test cases (no more than 1,000). Each case contains only one positive integer N.
+$N \leq 1,000,000,000$.
+Number of cases with $N > 1,000,000$ is no more than 100.
+Output
+For each case, output the requested M, or output 0 if no solution exists.
+SampleInput
+3
+4
+5
+6
+SampleOutput
+1
+2
+1
+2
+
+
+//注意！！！！
+//求最小M  就是求最大素数p   最后n除以p 就是答案
+//而不是一个个素数乘  你个憨批
+
+#include <stdio.h>
+#include<string.h>
+#include<math.h>
+#include<algorithm>
+
+using namespace std;
+int k = 0;
+int vis[1000000];
+long long  prime[100000];
+void Eulersieve(int n)//素数表
+{
+    int i = 0;
+    int j = 0;
+    for(i = 2; i<=n; i++)
+    {
+        if(vis[i] == 0)
+        {
+            prime[k++] = i;
+        }
+        for(j = 0; j<k; j++)
+        {
+            if(i*prime[j] > n)
+            {
+                break;
+            }
+            vis[i*prime[j]] = 1;
+            if(i % prime[j] == 0)
+            {
+                break;
+            }
+        }
+    }
+}
+int main()
+{
+    long long int n = 0;
+    Eulersieve(100000);
+    while(~scanf("%lld", &n))
+    {
+        long long t = n;
+        if(n <= 1)
+        {
+            printf("0\n");
+            continue;
+        }
+        int i = 0;
+        long long p = 0;//找最大质数
+        for(i = 0; i<k && prime[i]*prime[i] <= n ; i++)
+        {
+            if(n%prime[i] == 0)
+            {
+                while(n % prime[i] == 0)
+                {
+                    n/=prime[i];
+                    p = max(prime[i],p);
+                }
+            }
+        }
+        if(n > 1)
+        {
+            p = max(n,p);
+        }
+        printf("%d\n", t/p);
+    }
+    return 0;
+}
