@@ -1,0 +1,118 @@
+给定某个正整数 N，求其素因子分解结果，即给出其因式分解表达式 
+输入格式：
+输入long int范围内的正整数 N。
+
+输出格式：
+按给定格式输出N的素因式分解表达式，即 N=p1^k1*p2^k2*…*pm^km，其中pi为素因子并要求由小到大输出，指数ki为pi的个数；当ki为1即因子pi只有一个时不输出ki。
+
+输入样例：
+1323
+结尾无空行
+输出样例：
+1323=3^3*7^2
+结尾无空行
+
+
+#include <stdio.h>
+#include<string.h>
+#include<math.h>
+int vis[666];
+int prime[666];
+int k = 0;
+int p[666];
+int b[666];
+int l = 0;
+void Eulersieve(int n)
+{
+    int i = 0;
+    int j = 0;
+    for(i = 2; i<=n; i++)
+    {
+        if(vis[i] == 0)
+        {
+            prime[k++] = i;
+        }
+        for(j = 0; j<k; j++)
+        {
+            if(i*prime[j] > n)
+            {
+                break;
+            }
+            vis[i*prime[j]] = 1;
+            if(i%prime[j] == 0)
+            {
+                break;
+            }
+        }
+    }
+
+}
+void getpb(int n)
+{
+    memset(p, 0, sizeof(p));
+    memset(b, 0, sizeof(b));
+    int i = 0;
+    for(i = 0; i < k && prime[i]<=sqrt(n); i++)
+    {
+        int e = 0;
+        if(n % prime[i] == 0)
+        {
+            while(n%prime[i] == 0)
+            {
+                e++;
+                n/=prime[i];
+            }
+            b[l] = prime[i];//得到底数
+            p[l] = e;//得到指数
+            l++;
+        }
+    }
+    if(n > 1)
+    {
+        p[l] = 1;
+        b[l] = n;
+    }
+}
+int main()
+{
+    Eulersieve(666);
+    long long n = 0;
+    scanf("%lld", &n);
+    printf("%lld=", n);
+    if(n == 1)
+    {
+        printf("1");
+    }
+    else
+    {
+        getpb(n);
+        int i = 0;
+        for(i = 0; i <=l &&p[i]!=0 ; i++)
+        {
+            if(p[i]!=1)
+            {
+                if(i == 0)
+                {
+                    printf("%d^%d", b[i], p[i]);
+                }
+                else
+                {
+                    printf("*%d^%d", b[i], p[i]);
+                }
+            }
+            else
+            {
+
+                if(i == 0)
+                {
+                    printf("%d", b[i]);
+                }
+                else
+                {
+                    printf("*%d", b[i]);
+                }
+            }
+        }
+    }
+    return 0;
+}
