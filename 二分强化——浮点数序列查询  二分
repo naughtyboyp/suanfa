@@ -1,0 +1,120 @@
+二分强化——浮点数序列查询
+TimeLimit:4000MS  MemoryLimit:128MB
+64-bit integer IO format:%lld
+已解决 | 点击收藏
+Problem Description
+已知在二维空间中有n个点，p0,p1……pn-1
+
+已按照x为第一优先级，y为第二优先级从大到小排好序；
+
+即若 pi<pj
+
+则pi.x<pj.x,或者pi.x==pj.x&&pi.y<pj.y
+
+
+
+Input
+只有一组数据
+第一行是两个整数n,m分别代表点的个数和查询次数
+接下来n行，每行有二个带三位小数的浮点数x,y代表一个点的坐标
+再接下来m行，每行的有4个数字x1,y1,x2,y2代表p1,p2且p1>=p2
+
+其中n,m<=100000;
+
+任意0<=x,y<10^6;
+
+
+
+Output
+输出n个点所有小于等于p1且大于等于p2的点的下标之和
+
+SampleInput
+6 4
+125.689 125.689
+125.689 125.688
+125.688 125.689
+125.688 125.689
+125.688 125.688
+125.688 125.688
+125.688 125.688 125.688 125.688
+125.688 125.689 125.688 125.688
+125.689 125.689 125.688 125.689
+125.688 125.689 125.688 125.689
+SampleOutput
+9
+14
+6
+5
+
+
+#include <bits/stdc++.h>
+#include<stdio.h>
+#include<string.h>
+using namespace std;
+struct p//
+{
+    double x;
+    double y;
+}my[100005];
+long long  Tmax(double x, double y, int n)
+{
+    int left = -1;
+    int right = n;
+    while(left+1<right)
+    {
+        int mid = (left + right)/2;
+        if(my[mid].x > x || my[mid].x == x && my[mid].y >= y)//表示left左边部分都大于等于 目标值y 
+        {
+            left = mid;
+        }
+        else 
+        {
+            right = mid;
+        }
+    }
+    return left;//返回最大的下标
+}
+long long  Tmin(double x, double y, int n)
+{
+    int left = -1;
+    int right = n;
+    while(left+1<right)
+    {
+        int mid = (left + right)/2;
+        if(my[mid].x > x || my[mid].x == x && my[mid].y > y)
+        {
+            left = mid;
+        }
+        else
+        {
+            right = mid;//表示right右边部分都小于等于目标值y
+        }
+    }
+    return right;//返回最小的下标
+}
+int main()
+{
+    int n = 0;
+    int m = 0;
+    scanf("%d%d", &n, &m);
+    int i = 0;
+    for(i = 0; i<n; i++)
+    {
+        scanf("%lf%lf", &my[i].x, &my[i].y);//结构体下标表示编号
+    }
+    while(m--)
+    {
+        double x1 = 0;
+        double y1 = 0;
+        scanf("%lf%lf", &x1, &y1);
+        long long l =Tmin(x1,y1,n);//编号l左边部分的点都不满足
+        double x2 = 0;
+        double y2 = 0;
+        scanf("%lf%lf", &x2, &y2);
+        long long r =Tmax(x2,y2,n);//编号r右边部分的点都不满足
+        //编号l-r都是满足条件的，求和就行，  注意最后sum可能爆int  所以数据类型要用开大
+        long long sum = (l+r)*(r-l+1)/2;//用求和公式求出下标之和
+        printf("%lld\n", sum);
+    }
+
+}
