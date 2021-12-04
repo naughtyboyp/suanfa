@@ -1,0 +1,59 @@
+重复滴！不要滴干活！
+TimeLimit:1000MS  MemoryLimit:128MB
+64-bit integer IO format:%lld
+已解决 | 点击收藏
+Problem Description
+翔弟是个强迫症，这天，他拿到了一个长度为n的序列，
+
+由于翔弟是个强迫症，所以他只想看到一段连续的且没有重复数字的序列，
+
+聪明的你能告诉翔弟，这段连续的序列最长是多少吗？
+
+Input
+第一行包含一个整数n(1 <= n <= 100)表示序列的长度
+
+第二行包含n个整数（范围均在1000以内），表示整数序列
+
+Output
+共一行，包含一个整数，表示无重复数据且下标连续序列最长的长度
+
+SampleInput
+6
+1 2 2 3 5 4
+SampleOutput
+4
+
+
+总结，本题关键点在于序列的起点
+#include <bits/stdc++.h>
+#include<stdio.h>
+#include<string.h>
+#include<math.h>
+#include<algorithm>
+using namespace std;
+int a[10005];
+int vis[10005];
+int k = 0;
+int main()
+{
+    int n = 0;
+    int i = 0;
+    scanf("%d", &n);
+    for(i = 0; i<n; i++)
+    {
+        scanf("%d", &a[i]);
+    }
+    int max1 = 0;
+    int k = 0;
+    for(i = 0; i<n; i++)//双指针，i在前面跑，k的起点是vis[a[i]]为1的起始点
+    {
+        vis[a[i]]++;
+        while(vis[a[i]] > 1)
+        {
+            vis[a[k]]--;
+            k++;
+        }
+        max1 = max(max1, i-k+1);
+    }
+     printf("%d", max1);
+}
