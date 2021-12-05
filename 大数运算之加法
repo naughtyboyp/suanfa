@@ -31,17 +31,12 @@ void add(int* x, int* y, int len)//默认len是位数最大的数的位数
 {
     int i = 0;
     int j = 0;
+    int k = 0;
     for(i = 0; i<=len; i++)//算到len+1位，加法位数最多就len+1位
     {
-        if(x[i] + y[i] >= 10)//补个
-        {
-            z[i] = x[i] + y[i] - 10;
-            x[i+1]+=1;
-        }
-        else
-        {
-            z[i] = x[i] + y[i];//加上
-        }
+        z[i] = x[i] + y[i] + k;
+        k = z[i]/10;
+        z[i]%=10;
     }
     if(z[len]!= 0 )//说明位数最高位进位 长度+1
     {
