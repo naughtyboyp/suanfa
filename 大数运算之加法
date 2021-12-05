@@ -42,7 +42,7 @@ void add(int* x, int* y, int len)//默认len是位数最大的数的位数
     {
         len++;
     }
-    /*for(i = len-1; i>0; i--)//大数加法不出现前缀0的情况
+    for(i = len-1; i>0; i--)//得加删前缀0的操作  如 0123 0123 得输出 246 而不是0246
     {
         if(z[i] == 0)
         {
@@ -52,7 +52,7 @@ void add(int* x, int* y, int len)//默认len是位数最大的数的位数
         {
             break;
         }
-    }*/
+    }
     for(i = len-1; i >=0; i--)
     {
         printf("%d", z[i]);
