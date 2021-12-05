@@ -8,16 +8,16 @@ void mul(int* x, int* y, int len1, int len2)
     for(i = 0; i<len1; i++)//从个位开始
     {
         int q = 0;
-        for(j = 0; j<len2; j++)//i的每一位都乘上
+        for(j = 0; j<=len2; j++)//i的每一位都乘上，算到len2是为了看看有没有进位
         {
             z[i+j] += x[i] * y[j] + q;//乘积 + 进位 + 原来来的值 最精华的一步
             q = z[i+j] / 10;
             z[i+j]%=10;
         }
-        z[i + len2] = q;//最后的结果要多一位数，结果是 0 + 进位
+        //z[i + len2] = q;//最后的结果要多一位数，结果是 0 + 进位
     }
-    int len = len1 + len2;
-    while(z[len-1] == 0 && len > 0)
+    int len = len1 + len2;//不知道最后是几位数，用最大长度去搜索
+    while(z[len-1] == 0 && len > 0)//搜索长度，减去前缀0
     {
         len--;
     }
