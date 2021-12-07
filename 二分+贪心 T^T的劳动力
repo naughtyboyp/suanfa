@@ -45,6 +45,9 @@ SampleOutput
 //把最大付出的劳动力来二分
 //假设付出劳动力最大，那么其他人的和sum应该最小
 //即 当最大付出劳动力是mid时，求此时对应sum与m之间的大小
+
+//本题卡了这么久的原因是因为变量名搞错了
+//所以一定要设置好变量名，不要弄乱了！！！！ mid写着写着写成m   这是不能的！！！！！一定要有高辨识度
 #include<stdio.h>
 #include<string.h>
 #include<algorithm>
