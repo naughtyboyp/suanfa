@@ -1,0 +1,93 @@
+T^T的劳动力
+TimeLimit:1000MS  MemoryLimit:128MB
+64-bit integer IO format:%lld
+Problem Description
+某年秋Home_Z作为创始人，在FJUT创建了一个名为FJUT_ACM的邪恶组织，该组织成立的目的是压榨在FJUT内生活的平民。通过“洗脑”强迫普通平民无偿献出自己的劳动力。为获取免费劳动力，Home_Z计划培养多名管理人员，在FJUT每年下半年的FJUT迁入热潮中，继续对新进入FJUT的普通民众洗脑。
+
+
+
+为获取免费劳动力，Home_Z准备从组织内寻找并培养出可以担当大任的人物。
+
+自从T^T加入FJUT_ACM，Home_Z就感觉T^T骨骼惊奇，可以从中剥削的免费劳动力不可估量~
+
+
+
+FJUT_ACM中有n个工作台，所有成员一字排开，每人坐一个座位，在工作台上付出劳动。
+
+在Home_Z的领导下，绝对不允许任何人和坐在旁边的人相差太多。
+
+
+
+在某次大工程的项目中，总共需要m个单位的劳动力，而T^T就坐在第k个工作台上。n个工作台上的所有人付出的劳动力总和等于m，并且每相邻两个人付出的劳动力相差不超过1个单位，并且每个人至少付出1个单位的劳动力。
+
+Home_Z想知道T^T在这次项目中最多能付出多少的劳动力。
+
+Input
+多组数据
+
+每组数据输入三个整数n,m,k(1 ≤ n ≤ m ≤ 109, 1 ≤ k ≤ n)。
+
+Output
+每组数据输出一个整数，表示T^T最大可能付出的劳动力。
+
+SampleInput
+4 6 2
+3 10 3
+3 6 1
+SampleOutput
+2
+4
+3
+
+
+//总结，找到二分的对象
+//然后贪心一下
+//把最大付出的劳动力来二分
+//假设付出劳动力最大，那么其他人的和sum应该最小
+//即 当最大付出劳动力是mid时，求此时对应sum与m之间的大小
+#include<stdio.h>
+#include<string.h>
+#include<algorithm>
+#include<math.h>
+using namespace std;
+int main()
+{
+    long long int n = 0;
+    long long int m = 0;
+    long long int k = 0;
+    while(~scanf("%lld%lld%lld", &n, &m, &k))
+    {
+        long long  left = 0;
+        long long  right = m+1;
+        while(left+1<right)
+        {
+            long long  mid = (left + right)/2;
+            long long sum = mid;
+            if(mid-k+1>=1)
+            {
+                sum+= (mid-k+1+mid-1)*(k-1)/2;
+            }
+            else
+            {
+                sum+= k-mid+1 + (mid-1 + 2)*(mid-2)/2;
+            }
+            if(mid-n+k>=1)
+            {
+                sum+= (mid-n+k+mid-1)*(n-k)/2;
+            }
+            else
+            {
+                sum+= (mid-1 + 2) * (mid-2)/2 + n-k-mid + 2;
+            }
+            if(sum > m)
+            {
+                right = mid;
+            }
+            else
+            {
+                left = mid;
+            }
+        }
+        printf("%lld\n", left);
+    }
+}
