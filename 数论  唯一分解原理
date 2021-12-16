@@ -109,3 +109,145 @@ int main()
     }
     return 0;
 }
+
+
+
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+#include<cstring>
+#include<cmath>
+using namespace std;
+int k = 0;
+int l = 0;
+
+
+int prime[1000];
+void getprime();
+void getans(int n);
+int ans[666];//第二种写法，下标表示素数，内容表示他的幂
+int main()
+{
+    int n = 0;
+    getprime();
+    cin >> n;
+    getans(n);
+    cout << "n = ";
+    int i = 0;
+}
+void getprime()
+{
+    int i = 0;
+    int j = 0;
+    for(i = 2; i<= 1000; i++)
+    {
+        for(j = 2; j<=sqrt(i); j++)
+        {
+            if(i % j == 0)
+            {
+                break;
+            }
+        }
+        if(j > sqrt(i))
+        {
+            prime[k++] = i;
+        }
+    }
+}
+void getans(int n)
+{
+    int i = 0;
+    for(i = 0; i<k && prime[i]<=sqrt(n); i++)
+    {
+
+        if(n % prime[i] == 0)
+        {
+            while(n % prime[i] == 0)
+            {
+                n/=prime[i];
+                ans[prime[i]]++;
+            }
+        }
+    }
+    if(n > 1)
+    {
+        ans[n]++;
+    }
+}
+
+
+//这种写法可以得出素数因子个数
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+#include<cstring>
+#include<cmath>
+using namespace std;
+int k = 0;
+int l = 0;
+int prime[1000];
+void getprime();
+void getans(int n);
+int ans[666];
+int main()
+{
+    int n = 0;
+    getprime();
+    cin >> n;
+    getans(n);
+    cout << "n = ";
+    int i = 0;
+    for(i = 0; i<l; i++)
+    {
+        if(i == 0)
+        {
+            cout << ans[i];
+        }
+        else
+        {
+            cout << "*" << ans[i];
+        }
+    }
+
+
+}
+void getprime()
+{
+    int i = 0;
+    int j = 0;
+    for(i = 2; i<= 1000; i++)
+    {
+        for(j = 2; j<=sqrt(i); j++)
+        {
+            if(i % j == 0)
+            {
+                break;
+            }
+        }
+        if(j > sqrt(i))
+        {
+            prime[k++] = i;
+        }
+    }
+}
+void getans(int n)
+{
+    int i = 0;
+    for(i = 0; i<k && prime[i]<=sqrt(n); i++)
+    {
+        if(n % prime[i] == 0)
+        {
+            while(n % prime[i] == 0)
+            {
+                n/=prime[i];
+                ans[l++] = prime[i];
+            }
+        }
+    }
+    if(n > 1)
+    {
+        ans[l++] = n;
+    }
+}
+
+
