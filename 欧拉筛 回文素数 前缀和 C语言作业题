@@ -1,0 +1,152 @@
+T216599 C语言作业题
+提交47
+
+通过7
+
+时间限制1.00s
+
+内存限制128.00MB
+
+提交答案加入题单
+
+题目提供者CSU-ACM 出题组
+
+难度暂无评定
+
+历史分数无
+
+ 提交记录
+
+标签
+暂无标签进入讨论版
+
+相关讨论
+暂无
+
+推荐题目
+暂无 展开
+
+题目背景
+21级新生的C语言作业里有这样一道题：
+
+“ 给你一个区间 [L,R][L,R] ，让你求出在这个区间内有多少回文素数，L \leq≤ R \leq≤ 10^3103 ”
+
+题目描述
+相信你已经可以熟练解决这个问题了，但 FoXreignFoXreign 觉得它很 boring ，于是他改了下题面，以至于让它看起来更 exciting ：
+
+“ 给你一个正整数 nn 和 mm 个区间 [L,R][L,R] ，让你求出在每个区间内有多少个回文素数 ”
+
+输入格式
+第 11 行输入两个数 n,mn,m ，分别表示区间最大的右边界与询问的组数。
+
+对 22 ~ m + 1m+1 行每行两个数 L,RL,R ，表示询问的区间。
+
+n \leq 10^7, m \leq 10^5, 1 \leq L \leq R \leq nn≤107,m≤105,1≤L≤R≤n
+
+输出格式
+对每组询问，输出一行，表示区间内的回文素数个数。
+
+输入输出样例
+输入 #1复制
+
+1000 5
+1 10
+10 200
+200 400
+600 800
+800 1000
+输出 #1复制
+
+4
+6
+4
+4
+2
+说明/提示
+Author:FoXreign
+
+#include <iostream>
+#include<cstring>
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+//本题欧拉筛打出素数表，然后标记出回文素数
+//接着用前缀和计算区间的素数个数和即可
+typedef long long ll;
+int const N = 10000005;
+int k = 0;
+int vis[N];
+int prime[N];
+int ans[N];
+void Eulersieve(ll n)//欧拉筛
+{
+    int i = 0;
+    int j = 0;
+    for (i = 2; i <= n; i++)
+    {
+        if (vis[i] == 0)
+        {
+            prime[k++] = i;
+        }
+        for (j = 0; j < k; j++)
+        {
+            if (i * prime[j] > n)
+            {
+                break;
+            }
+            vis[i * prime[j]] = 1;
+            if (i % prime[j] == 0)
+            {
+                break;
+            }
+        }
+    }
+}
+int check(ll num)//判断回文素数
+{
+    ll temp = num;
+    ll ans = 0;
+    while (temp)
+    {
+        ans = ans * 10 + temp % 10;//判断是不是回文数
+        temp /= 10;
+    }
+    if (ans == num)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+int main()
+{
+    ll n = 0;
+    ll m = 0;
+    cin >> n >> m;
+    Eulersieve(n);
+    int i = 0;
+    for (i = 0; i < k; i++)//标记回文素数
+    {
+        if (check(prime[i]))
+        {
+            ans[prime[i]] = 1;
+        }
+    }
+    for (i = 1; i <= n; i++)//前缀和计算1-n的素数个数和
+    {
+        ans[i] += ans[i - 1];
+    }
+    while (m--)
+    {
+        ll l = 0;
+        ll r = 0;
+        cin >> l >> r;
+        cout << ans[r] - ans[l - 1] << endl;//区间内的回文素数个数
+    }
+    return 0;
+}
+————————————————
+版权声明：本文为CSDN博主「cs1414358917」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/cs1414358917/article/details/122019922
