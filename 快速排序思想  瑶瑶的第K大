@@ -1,0 +1,90 @@
+一天，萌萌的妹子--瑶瑶(tsyao)很无聊，就来找你玩。可是你们都不知道玩什么。。。尴尬了一阵子，机智的瑶瑶就提议：“这样吧，你说N个整数xi，然后在随意说一个数字k，我能够快速地说出这些数字里面第 k 大的数字。”
+
+Input
+第1行 两个整数N, K以空格隔开；
+
+第2行 有N个整数（可出现相同数字，均为随机生成），同样以空格隔开。
+
+0 < n ≤ 2*10^6 , 0 < k ≤ n
+
+1 ≤ xi ≤ 10^8
+
+Output
+输出第  k 大的数字。
+SampleInput
+5 2
+5 4 1 3 1
+SampleOutput
+4
+
+//总结：
+//1.本题输入量很大，超过1e5的输入量不要用cin 用scanf cin读的慢
+//2.利用快速排序的思想
+
+
+#include<algorithm>
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+using namespace std;
+#pragma warning(disable:4996)
+typedef long long ll;
+#include<iostream>
+using namespace std;
+const int maxn = 2 * 1e6 + 5;
+int a[maxn];
+
+int mysort(int l, int r)
+{
+	int temp = a[l];//基准数
+	int i = l;//左哨兵
+	int j = r;//右哨兵
+	while (i != j)
+	{
+		while (a[j] <= temp && i < j)//一定是右边先动 j右边的数都是<=基准数的
+		{
+			j--;
+		}
+		while (a[i] >= temp && i < j)//i左边的数都是>=基准数的
+		{
+			i++;
+		}
+		if (i < j)
+		{
+			swap(a[i], a[j]);//第一轮交换
+		}
+	}
+	//此时做到  哨兵左边的数都是大于等于基准数的  右边小于等于基准数
+	//i即表示第i大的数
+	swap(a[l], a[i]);//交换哨兵与基准数的位置
+	return i;
+}
+int main()
+{
+	int n = 0;
+	int k = 0;
+	scanf("%d%d", &n, &k);//输入量大一定要用scanf ！！！！！！
+	int i = 0;
+	for (i = 1; i <= n; i++)
+	{
+		scanf("%d", &a[i]);//输入量大一定要用scanf ！！！！！！
+	}
+	int l = 1;
+	int r = n;
+	int pos = mysort(1, n);//pos表示第pos大
+	while (k != pos)//缩小一半范围排序，直到pos==k  复杂度平均有on
+	{
+		if (pos > k)
+		{
+			r = pos - 1;
+		}
+		else
+		{
+			l = pos + 1;
+		}
+		pos = mysort(l, r);
+	}
+	printf("%d", a[k]);
+	return 0;
+}
