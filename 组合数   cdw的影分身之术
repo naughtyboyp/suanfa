@@ -1,0 +1,99 @@
+cdw的影分身之术
+TimeLimit:1000MS  MemoryLimit:128MB
+64-bit integer IO format:%lld
+Problem Description
+cdw作为20当之无愧的神,应该是福工众所周知的存在,可是,他却发现,21级的新生们,
+
+居然还有一部分同学不认识他！这令cdw感觉到自己的失败,他思索一番,想到通过查寝这一条路能让21新生对他印象深刻,
+
+于是他决定,要去21新生的宿舍查寝！
+
+可是,cdw是一个大忙人,平时的时间少的可怜捏,于是他便打算使用他隐藏多时的影分身之术,
+
+让他的影分身代替他去查寝,可是捏,有的寝室的新生记性不太好,只去一个cdw是不能让他们铭记的,
+
+只有去至少x个cdw才能让他们铭记cdw,
+
+现在cdw知道自己的能力可以创造出n个相同的影分身,一共有m个不同的寝室的21新生可能还不认识cdw,
+
+同时,cdw知道每个寝室至少要去ai个cdw才能让新生铭记,
+
+当然,有的寝室可能会出现需求为0的情况,这种情况下,cdw就可以想派影分身去就派,不想派,就不派咯
+
+现在，cdw想知道他一共有多少种分配方案,能够让所有寝室的新生铭记自己呢?
+
+cdw觉得这届新生一定都是大牛,所以他将这个问题提出,来考考你们！
+
+注意cdw是个苛刻的人捏,因此他不希望自己的影分身偷懒,所以所有影分身都必须要去新生宿舍捏！
+
+由于分配方案的结果可能非常大捏,所以cdw希望你能够对答案取模1e9+7捏!!!
+
+Input
+第一行包括两个整数n,m(0 <= n, m <= 500)
+
+弟二行包括m个整数, a0, a1,...an-1(0 <= ai <= 6)
+
+Output
+输出只有一行捏,很轻松对吧,输出cdw派出的影子方案数就好了捏！！
+
+SampleInput
+5 5
+1 1 1 1 1
+SampleOutput
+1
+hints:很明显捏,5个影分身是相同的,所以只有一种方案捏
+
+#pragma warning(disable:4996)
+#include <iostream>
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+#include<queue>
+using namespace std;
+#pragma warning(disable:4996)
+#include <iostream>
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+#include<queue>
+using namespace std;
+const int mod = 1000000007;
+typedef long long ll;
+ll comb[1005][1005];
+//#user 35
+int main()
+{
+	int i = 0;
+	int j = 0;
+	for (i = 1; i < 1005; i++)
+	{
+		comb[i][0] = 1;
+		comb[i][i] = 1;
+	}
+	for (i = 2; i < 1005; i++)
+	{
+		for (j = 1; j < i; j++)
+		{
+			comb[i][j] = comb[i - 1][j-1] + comb[i - 1][j];
+			comb[i][j] %= mod;
+		}
+	}
+	int n = 0;
+	int m = 0;
+	cin >> n >> m;
+	int sum = n;
+	for (i = 0; i < m; i++)
+	{
+		int temp = 0;
+		cin >> temp;
+		sum = sum - temp + 1;
+	}
+	if (sum < m)
+	{
+		cout << 0 << endl;
+	}
+	else
+	{
+		cout << comb[sum - 1][m - 1];
+	}
+}
