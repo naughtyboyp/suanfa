@@ -1,0 +1,114 @@
+ycx的子串难题
+TimeLimit:3000MS  MemoryLimit:128MB
+64-bit integer IO format:%lld
+Problem Description
+现有一个仅由 y,c,x 三个字母构成的字符串 S 。
+ycx 认为一个字符串是好的当且仅当这个字符串的前n位字符全是 y ，第 n+1 位到第 2∗n 位全是 c ，第 2∗n+1 到第 3∗n 位全是 x 。
+请找出给定的字符串 S 中满足 ycx 要求的子串的 n 的最大值。
+
+
+注意：子串是字符串连续不断的一块字符串：例如"abcdefg" 则"bcd" 为其子串但“aeg”不是其子串。
+
+Input
+第一行给出一个正整数 t(1<=t<=100)
+
+之后的t行，每行给出一个字符串 S(1<= S.length <=105)
+
+Output
+对每一组输入，在一行中输出最大满足要求的n。
+
+SampleInput
+3
+ycx
+yyc
+cxyyccxx
+SampleOutput
+1
+0
+2
+
+
+#include <iostream>
+#include<algorithm>
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+#pragma warning(disable:4996) 
+//对于子串，子序列，可以考虑双指针
+//其次有最大值就可以考虑二分，写好check即可
+//计算区间个数，前缀和是个好东西，预处理，然后静态访问
+
+
+//本题前缀和预处理三个字母出现次数的前缀和，便于得出区间和
+//然后二分n的值即可
+//check函数  通过双指针，区间和，当三个条件都满足时，说明此时的mid成立  然后就试试更大值
+
+
+using namespace std;
+char a[100005];
+int main()
+{
+    int t = 0;
+    cin >> t;
+    getchar();
+    while (t--)
+    {
+        scanf("%s", a);
+        int n = strlen(a);
+        int r = 0;
+        int ans = 0;
+        while (r < n)
+        {
+            int py = 0;//计算个数
+            int pc = 0;
+            int px = 0;
+            while (a[r] != 'y' && r < n)//r指针找到y的起始位置
+            {
+                r++;
+            }
+            if (a[r] == 'y')//如果没越界
+            {
+                while (a[r] == 'y' && r < n)//找到y的末尾
+                {
+                    r++;
+                    py++;
+                }
+            }
+            else
+            {
+                continue;
+            }
+            if (a[r] == 'c')//判断是不是c，不是就下一把
+            {
+                while (a[r] == 'c' && r < n)//找c的末尾
+                {
+                    r++;
+                    pc++;
+                }
+            }
+            else
+            {
+                continue;
+            }
+            if (a[r] == 'x')//同上
+            {
+                while (a[r] == 'x' && r < n)
+                {
+                    r++;
+                    px++;
+                }
+            }
+            else
+            {
+                continue;
+            }
+            if (pc <= py && pc <= px)//中间的大哥才是决定因素
+            {
+                ans = max(ans, pc);
+            }
+        }
+        cout << ans << endl;
+    }
+
+
+
