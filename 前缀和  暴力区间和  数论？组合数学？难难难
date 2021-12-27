@@ -1,0 +1,78 @@
+数论？组合数学？难难难
+TimeLimit:2000MS  MemoryLimit:512MB
+64-bit integer IO format:%lld
+Problem Description
+太难了，集训队已经缺少经费交服务器的钱了也没有经费买奖品了，为了帮助集训队更好的训练，小薛决定开船去寻宝，小薛精疲力竭的登上一座宝岛，映入眼帘的是一排宝箱，宝箱里放置的各种价值的宝物，小薛不是一个贪心的人，他只想拿一定金额的宝物来为新生赛凑奖品，多了不行，少了也不行，一定要正正好。岛主被小薛不贪心的品性打动，决定让他拿连续的一堆宝箱来凑够一定的价值,但是岛主想要考考小薛所以有一些宝箱中放的是惩罚，选它就会扣掉一些钱。小薛想知道，他有多少种方案可以筹够总金额。大家可以浅做一下，答案不一定大，但是小薛还是希望你能输出方案数mod1000000007。（本题时限为2S）
+
+Input
+输入一个t表示有t组数据（1<=t<=10），每组数据输入两个数字n、k代表有n个宝箱（1<=n<=8000）以及所需要的金额k（1<=k<=1000000）。
+
+接着是n个数字wi，wi代表第i个宝箱的价值（-1000<=wi<=1000）
+
+Output
+每行输出一个整数代表获取价值k的方案数
+
+SampleInput
+2
+5 4
+2 2 2 2 2
+1 5
+3
+SampleOutput
+4
+0
+#pragma warning(disable:4996)
+#include <iostream>
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+#include<queue>
+using namespace std;
+#pragma warning(disable:4996)
+#include <iostream>
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+#include<queue>
+using namespace std;
+const int mod = 1000000007;
+const int N = 10005;
+typedef long long ll;
+ll a[N];
+//#user 35
+int main()
+{
+	int t = 0;
+	cin >> t;
+	while (t--)
+	{
+		int n = 0;
+		int k = 0;
+		int i = 0;
+		cin >> n >> k;
+		for (i = 1; i <= n; i++)//初始状态
+		{
+			cin >> a[i];
+		}
+		for (i = 1; i <= n; i++)
+		{
+			a[i] += a[i - 1];
+		}
+		int j = 0;
+		ll ans = 0;
+		for (i = 1; i <= n; i++)//i表示从i开始
+		{
+			for (j = i; j <= n; j++)
+			{
+				if (a[j] - a[i - 1] == k)
+				{
+					ans++;
+				}
+			}
+		}
+		ans %= mod;
+		cout << ans << endl;
+	}
+	
+
+}
