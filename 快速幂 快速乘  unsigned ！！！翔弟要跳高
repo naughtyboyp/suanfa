@@ -1,0 +1,93 @@
+翔弟要跳高
+TimeLimit:1000MS  MemoryLimit:64MB
+64-bit integer IO format:%lld
+Problem Description
+在新生大哥的监督下，翔弟不断进行跑步锻炼。皇天不负有心人——终于，zzx已练成无影脚，一秒跑100米根本不是问题。
+
+但是zzx并不满足于此，一口气能向上跳m层楼的他认为这还远远不够，所以每天都会进行跳高特训。
+
+zzx找到一栋n层高的楼，开始练习跳高。
+
+已知zzx身体里的潜能促使他每跳一次都会让他下一次向上跳的层数为这次的m倍（第一次跳m层）。
+
+且为了防止zzx跳的太高，最高楼天花板装上了到一楼的传送门（即不会跳出屋子）。
+
+现在请问，当zzx已经跳了a下时，然后从第k楼开始跳，会在哪一层停下来？
+
+Input
+第一行输入题目中所提到的n,k,m,a(四个数都为正整数且1<=n,m,a<2^63，1<=k<=n)
+
+Output
+输出zzx将在哪一层停下来
+
+SampleInput
+3 1 2 1
+SampleOutput
+2
+
+#pragma warning(disable:4996)
+#include <iostream>
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+#include<queue>
+using namespace std;
+//const int mod = 1000000007;
+typedef unsigned long long ll;
+ll fastmul(ll a, ll b, ll mod)
+{
+	while (a > mod)
+	{
+		a -= mod;
+	}
+	ll ans = 0;
+	while (b)
+	{
+		if (b & 1)
+		{
+			ans += a;
+			while (ans > mod)
+			{
+				ans -= mod;
+			}
+		}
+		a <<= 1;
+		while (a > mod)
+		{
+			a -= mod;
+		}
+		b >>= 1;
+	}
+	return ans;
+}
+ll fastpower(ll base, ll power, ll mod)
+{
+	base %= mod;
+	ll ans = 1;
+	while (power)
+	{
+		if (power & 1)
+		{
+			ans = fastmul(ans, base, mod);
+		}
+		power >>= 1;
+		base = fastmul(base, base, mod);
+	}
+	return ans;
+}
+//#user 35;
+int main()
+{
+	ll n = 0;
+	ll k = 0;
+	ll m = 0;
+	ll a = 0;
+	scanf("%lld%lld%lld%lld", &n, &k, &m, &a);
+	ll step = fastpower(m, a + 1, n);//一次跳step层
+	ll ans = k + step;
+	if (ans > n)
+	{
+		ans -= n;
+	}
+	printf("%lld", ans);
+}
