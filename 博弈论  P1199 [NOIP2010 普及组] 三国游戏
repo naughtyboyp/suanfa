@@ -1,0 +1,59 @@
+#include<algorithm>
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+#include <iostream>
+#include<stack>;
+#pragma warning(disable:4996) 
+//本题是博弈论  拿到所有组合中的最大第二大 必赢  人不可能拿到最大的  
+//博弈论的特点 就是  
+/*1、博弈模型为两人轮流决策的非合作博弈。即两人轮流进行决策
+，并且两人都使用最优策略来获取胜利。
+
+2、博弈是有限的。即无论两人怎样决策，都会在有限步后决出胜负。
+
+3、公平博弈。即两人进行决策所遵循的规则相同。*/
+
+using namespace std;
+typedef long long ll;
+int a[1000][1000];
+int b[10000];
+int camp(int x, int y)
+{
+    return x > y;
+}
+int main()
+{
+    int n = 0;
+    cin >> n;
+    int i = 0;
+    int j = 0;
+    int max1 = 0;
+    for (i = 1; i <= n; i++)
+    {
+        for (j = i; j <= n; j++)
+        {
+            if (j == i)
+            {
+                a[i][j] = -1;
+                continue;
+            }
+            cin >> a[i][j];
+            a[j][i] = a[i][j];
+        }
+        sort(a[i] + 1, a[i] + n + 1, camp);
+        if (max1 < a[i][2])
+        {
+            max1 = a[i][2];
+        }
+    }
+
+    cout << 1 << endl << max1;
+
+    return 0;
+}
+
+
+
+
+
