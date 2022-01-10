@@ -1,0 +1,64 @@
+#include<algorithm>
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+#include <iostream>
+#include<stack>
+#include<cstdlib>
+#include<map>
+#pragma warning(disable:4996) 
+//总结 通过求导，得出 三个单调区间
+//然后二分求解各个区间的解即可
+using namespace std;
+typedef long long ll;
+double a = 0;
+double b = 0;
+double c = 0;
+double d = 0;
+
+int check(double l, double mid)
+{
+    double f1 = a * pow(l, 3) + b * pow(l, 2) + c * l + d;
+    double f2 = a * pow(mid, 3) + b * pow(mid, 2) + c * mid + d;
+    if (f1 * f2 < 0)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+double ans(double l, double r)
+{
+    while (l + 0.0001 < r)//找第一个
+    {
+        double mid = (l + r) / 2;
+        if (check(l, mid))
+        {
+            r = mid;
+        }
+        else
+        {
+            l = mid;
+        }
+    }
+    printf("%.2lf ", r);
+    return r;
+}
+int main()
+{
+    
+    cin >> a >> b >> c >> d;
+    double x1 = ((-2) * b - sqrt(4 * b * b - 12 * a * c)) / 6*a;
+    double x2 = ((-2) * b + sqrt(4 * b * b - 12 * a * c)) / 6*a;
+    double a1 = ans(-100.5, x1 + 0.5);
+    double a2 = ans(x1-0.5, x2 + 0.5);
+    ans(x2-0.5, 100.5);
+    return 0;
+}
+
+
+
+
+
