@@ -1,0 +1,45 @@
+#include<algorithm>
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+#include <iostream>
+#include<stack>
+#include<cstdlib>
+#include<map>
+#pragma warning(disable:4996) 
+using namespace std;
+typedef long long ll;
+//总结 模拟 + 贪心
+//关键点在于 一层一层铺的 所以范围 n- 1 倒序搜索 最高层 
+const int N = 10000;
+int a[100005][5];
+int main()
+{
+    int n = 0;
+    int i = 0;
+    cin >> n;
+    for (i = 1; i <= n; i++)
+    {
+        cin >> a[i][1] >> a[i][2] >> a[i][3] >> a[i][4];
+        a[i][3] += a[i][1];
+        a[i][4] += a[i][2];
+    }
+    int x = 0;
+    int y = 0;
+    cin >> x >> y;
+    for (i = n; i >= 1; i--)
+    {
+        if (x >= a[i][1] && x <= a[i][3] && y >= a[i][2] && y <= a[i][4])
+        {
+            cout << i;
+            return 0;
+        }
+    }
+    cout << -1;
+    return 0;
+}
+
+
+
+
+
