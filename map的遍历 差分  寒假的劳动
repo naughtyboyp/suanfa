@@ -1,0 +1,84 @@
+链接：https://ac.nowcoder.com/acm/contest/27348/D
+来源：牛客网
+
+小z由于在家摸鱼太久，被他妈妈赶去做劳动了，
+现在小z带着刷子，拿着油漆桶来到了一个幼儿园，
+他的目标是粉刷这个幼儿园的墙，小z比较懒，
+所以他的工作是茫无目的的应付完成的，
+现在，我们把这堵墙假设成一个一维坐标系，
+小z从坐标原点(0),出发，一共会进行N次移动，
+移动方式有两种
+1：L x 表示向左移动x个单位距离
+2：R x 表示向右移动x个单位距离
+现在给出小z的N次移动，幼儿园老师想知道这堵墙被粉刷了至少两次的总长度
+小z的每次移动距离原点都不会超过109
+输入描述:
+第一行包含一个整数N
+接下来N行，每行包括一个行动指令
+保证：10%的数据 1 <= N <= 10, 1 <= x <= 100且只会向右移动
+     50%的数据 1 <= N <= 103, 1 <= x <= 103且向右移动的总距离一定大于等于向左移动的距离
+     100%的数据 1 <= N <= 105, 1 <= x <= 109，且移动距离原点不会超过109
+输出描述:
+输出被粉刷了至少两次的总长度
+示例1
+输入
+复制
+5
+R 5
+L 5
+R 10
+L 10
+R 5
+输出
+复制
+10
+
+#include<algorithm>
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+#include <iostream>
+#include<stack>
+#include<cstdlib>
+#include<map>
+#pragma warning(disable:4996)
+using namespace std;
+//总结 map 差分 思维
+//学会了遍历map
+//for(auto [x,v]: d)
+const int N = 1e5 + 5;
+const int mod = 1e9 + 7;
+typedef long long LL;
+int main()
+{
+	int n;
+	cin >> n;
+	map<int, int> d;
+	int x = 0, y;
+	char ch[2];
+	while (n--)
+	{
+		scanf("%s%d", ch, &y);
+		if (*ch == 'R')
+		{
+			d[x]++;
+			d[x + y]--;
+			x += y;
+		}
+		else
+		{
+			d[x - y]++;
+			d[x]--;
+			x -= y;
+		}
+	}
+	int last = 0;
+	int sum = 0, ans = 0;
+	for (auto& [x, v] : d)
+	{
+		if (sum >= 2) ans += x - last;
+		last = x;
+		sum += v;
+	}
+	cout << ans << endl;
+}
