@@ -1,0 +1,139 @@
+木棍游戏
+ 比赛主页
+ 
+ 我的提交
+
+时间限制：C/C++ 1秒，其他语言2秒
+空间限制：C/C++ 262144K，其他语言524288K
+Special Judge, 64bit IO Format: %lld
+题目描述 
+给出 nn 根长度不一的木棍，第 ii 根棍子长度为 a_ia 
+i
+​
+  。两根长度分别为 a_ba 
+b
+​
+  和 a_ca 
+c
+​
+  的木棍可以拼接成一根长度为 a_b+a_ca 
+b
+​
+ +a 
+c
+​
+  的木棍，同理 33 根， 44 根，甚至 nn 根都能拼接。
+
+问：使用这 nn 根木棍作三角形的边（一根木棍至多使用一次，也可以不使用），能拼出的面积最大的三角形的面积。
+
+输入描述:
+第一行包含一个整数 nn (3 \le  n \le  8)(3≤n≤8)，表示木棍的数量。
+
+第二行包含 nn 个整数，用空格隔开，表示 nn 根木棍的分别长度 a_1,a_2,...,a_na 
+1
+​
+ ,a 
+2
+​
+ ,...,a 
+n
+​
+  其中 1\le a_i\le 1e31≤a 
+i
+​
+ ≤1e3。
+
+输出描述:
+输出一行，表示能拼出来的最大三角形的面积，结果保留一位小数。如果无法拼出三角形，输出-1−1。
+示例1
+输入
+复制
+3
+3 4 5
+输出
+复制
+6.0
+示例2
+输入
+复制
+3
+3 4 7
+输出
+复制
+-1
+
+
+#include<algorithm>
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+#include <iostream>
+#include<stack>
+#include<cstdlib>
+#include<map>
+#pragma warning(disable:4996) 
+using namespace std;
+typedef long long ll;
+const int N = 10005;
+double gets(int a, int b, int c)
+{
+    double s = (a + b + c) / 2;
+    return sqrt(s * (s - a) * (s - b) * (s - c));
+}
+double ans = -1;
+int n = 0;
+double A = 0;
+double B = 0;
+double C = 0;
+int a[100];
+void dfs(int now)
+{
+    if (now == n + 1)
+    {
+        if (A + B > C && B + C > A && A + C > B)
+        {
+            double s = gets(A, B, C);
+            ans = max(ans, s);
+        }
+        return;
+       
+    }
+    dfs(now + 1);
+    A += a[now];
+    dfs(now + 1);
+    A -= a[now];
+    B += a[now];
+    
+    dfs(now + 1);
+    B -= a[now];
+    C += a[now];
+    
+    dfs(now + 1);
+    C -= a[now];
+}
+int main()
+{
+    
+    cin >> n;
+    int i = 0;
+    for (i = 1; i <= n; i++)
+    {
+        cin >> a[i];
+    }
+    dfs(1);
+    if (ans <= 0)
+    {
+        cout << -1;
+    }
+    else
+    {
+        printf("%.1lf", ans);
+    }
+    
+    return 0;
+}
+
+
+
+
+
