@@ -1,0 +1,111 @@
+#include <stdio.h>
+#include <string.h>
+#include<iostream>
+#include<algorithm>
+#include<string>
+#include<cmath>
+#include<queue>
+#include<map>
+#pragma warning(disable:4996)
+using namespace std;
+typedef long long ll;
+const int N = 1005;
+//总结 bfs
+//这题就相当于  多了一个方向
+//这里用的二维数组来存三维数组  bfs时一定要注意处理好边界的关系就好 
+//每个坐标的信息就用结构体来存储 x,y,z,num
+struct node
+{
+	int f;
+	int x;
+	int y;
+	int num;
+	node(int x, int y, int f,int num)
+	{
+		this->f = f;
+		this->x = x;
+		this->y = y;
+		this->num = num;
+	}
+};
+int sx = 0;
+int sy = 0;
+int sf = 0;
+int l = 0;
+int r = 0;
+int c = 0;
+char maze[N][N];
+
+void bfs()
+{
+	int dx[] = { 0,1,0,-1,r,-r };
+	int dy[] = { 1,0,-1,0,0,0 };
+	queue<node> q;
+	q.push(node(sx,sy,sf,0));
+	while (q.size())
+	{
+		int i = 0;
+		int x = q.front().x;
+		int y = q.front().y;
+		int f = q.front().f;
+ 		int num = q.front().num;
+		q.pop();
+		for (i = 0; i < 6; i++)
+		{
+			int tx = x + dx[i];
+			int ty = y + dy[i];
+			int tnum = num + 1;
+			int tf = f;
+			if (i == 4)
+			{
+				tf++;
+			}
+			if (i == 5)
+			{
+				tf--;
+			}
+			if(i <5)
+			{
+				if (tx <= tf * r || tx > (tf + 1) * r || ty > c || ty < 1 || maze[tx][ty] == '#')//处理好边界的关系
+				{
+					continue;
+				}
+			}
+			if (maze[tx][ty] == 'E')
+			{
+				printf("Escaped in %d minute(s).", tnum);
+				return;
+			}
+			if (maze[tx][ty] == '.')
+			{
+				maze[tx][ty] = 0;
+				q.push(node(tx, ty,tf, tnum));
+			}
+		}
+	}
+	cout << "Trapped!";
+}
+int main()
+{
+	cin >> l >> r >> c;
+	int i = 0;
+	int j = 0;
+	int k = 0;
+	for (i = 1; i <= l * r; i++)
+	{
+		for (j = 1; j <= c; j++)
+		{
+			cin >> maze[i+r][j];
+			
+			if (maze[i+r][j] == 'S')
+			{
+				sx = i+r;
+				sy = j;
+				sf = (sx-1) / r;
+			}
+		}
+	}
+	bfs();
+
+
+}
