@@ -1,0 +1,223 @@
+Fox Ciel is playing a mobile puzzle game called "Two Dots". The basic levels are played on a board of size n×mn×m cells, like this:
+
+Each cell contains a dot that has some color. We will use different uppercase Latin characters to express different colors.
+
+The key of this game is to find a cycle that contain dots of same color. Consider 4 blue dots on the picture forming a circle as an example. Formally, we call a sequence of dots d_{1},d_{2},...,d_{k}d 
+1
+​
+ ,d 
+2
+​
+ ,...,d 
+k
+​
+  a cycle if and only if it meets the following condition:
+
+These kk dots are different: if i≠ji
+
+=j then d_{i}d 
+i
+​
+  is different from d_{j}d 
+j
+​
+  .
+kk is at least 4.
+All dots belong to the same color.
+For all 1<=i<=k-11<=i<=k−1 : d_{i}d 
+i
+​
+  and d_{i+1}d 
+i+1
+​
+  are adjacent. Also, d_{k}d 
+k
+​
+  and d_{1}d 
+1
+​
+  should also be adjacent. Cells xx and yy are called adjacent if they share an edge.
+Determine if there exists a cycle on the field.
+
+输入格式
+The first line contains two integers nn and mm ( 2<=n,m<=502<=n,m<=50 ): the number of rows and columns of the board.
+
+Then nn lines follow, each line contains a string consisting of mm characters, expressing colors of dots in each line. Each character is an uppercase Latin letter.
+
+输出格式
+Output "Yes" if there exists a cycle, and "No" otherwise.
+
+题意翻译
+Fox Ciel最近在手机上玩一个名叫"Two Dots"的游戏，这个游戏是在一个n*m的棋盘上玩的，如下图：
+
+棋盘中的每个小方格中包含有一个点，并且这个点有特定的颜色。我们用大写字母'A'到’Z'来表示不同的颜色。 这个游戏的关键是要找一个有相同颜色的环。例如上图中，有4个蓝色点构成了一个环，我们定义一个序列d1, d2,...dk是一个环，当且仅当满足下列条件： 1、这k个点是在不同位置的，也就是说，如果i不等于j，那么di和dj是两个不同的点。 2、k至少是4。 3、所有点的颜色是相同的。 4、对于所有的1<=i<=k-1, di和d(i+1）是在相邻的位置，当然d1和dk也是相邻的，两个点相邻当且仅当他们有共同的边。
+
+现在你的任务是判断这个棋盘里面是否有满足这种条件的棋盘。 Input 输入第一行包含两个正整数n和m，表示棋盘中行和列的数量。(2<=n,m<=50) 接下来n行，每行有m个大写字符，表示棋盘中每个格子中小点点的颜色。注意是从字符A到字符Z。 Output 如果有满足条件的环，就输出Yes，否则输出No。
+
+Sample Input 输入样例1： 3 4 AAAA ABCA AAAA
+
+输入样例2： 3 4 AAAA ABCA AADA 输入样例3： 4 4 YYYR BYBY BBBY BBBY
+
+输入样例4： 7 6 AAAAAB ABBBAB ABAAAB ABABBB ABAAAB ABBBAB AAAAAB
+
+输入样例5： 2 13 ABCDEFGHIJKLM NOPQRSTUVWXYZ Sample Output 输出样例1： Yes
+
+输出样例2： No
+
+输出样例3： Yes
+
+输出样例4： Yes
+
+输出样例5： No Hint 第一个样例中所有的A组成了一个环。 第二个样例中没有满足条件的环。 第三个样例就是插图的例子。Y表示黄色，B表示蓝色，R表示红色。
+
+输入输出样例
+输入 #1复制
+3 4
+AAAA
+ABCA
+AAAA
+输出 #1复制
+Yes
+输入 #2复制
+3 4
+AAAA
+ABCA
+AADA
+输出 #2复制
+No
+输入 #3复制
+4 4
+YYYR
+BYBY
+BBBY
+BBBY
+输出 #3复制
+Yes
+输入 #4复制
+7 6
+AAAAAB
+ABBBAB
+ABAAAB
+ABABBB
+ABAAAB
+ABBBAB
+AAAAAB
+输出 #4复制
+Yes
+输入 #5复制
+2 13
+ABCDEFGHIJKLM
+NOPQRSTUVWXYZ
+输出 #5复制
+No
+说明/提示
+In first sample test all 'A' form a cycle.
+
+In second sample there is no such cycle.
+
+The third sample is displayed on the picture above ('Y' = Yellow, 'B' = Blue, 'R' = Red).
+
+
+#include <stdio.h>
+#include <string.h>
+#include<iostream>
+#include<algorithm>
+#include<string>
+#include<cmath>
+#include<queue>
+#include<map>
+#pragma warning(disable:4996)
+using namespace std;
+typedef long long ll;
+int n = 0;
+int m = 0;
+char maze[100][100];
+int vis[100][100];
+int dx[] = { 0,1,0,-1 };
+int dy[] = { 1,0,-1,0 };
+struct node
+{
+	int x;
+	int y;
+	node(int tx, int ty)
+	{
+		x = tx;
+		y = ty;
+	}
+};
+int check(int x, int y, char ch)
+{
+	int i = 0;
+	int num = 0;
+	for (i = 0; i < 4; i++)
+	{
+		int tx = x + dx[i];
+		int ty = y + dy[i];
+		if (maze[tx][ty] == ch)
+		{
+			num++;
+		}
+	}
+	return num;
+}
+int f = 0;
+void bfs(int sx, int sy, char ch)
+{
+	if (check(sx, sy,ch) <= 1)
+	{
+		return;
+	}
+	queue<node> q;
+	q.push(node(sx, sy));
+	vis[sx][sy] = 1;
+	while (q.size())
+	{
+		int x = q.front().x;
+		int y = q.front().y;
+		q.pop();
+		int i = 0;
+		for (i = 0; i < 4; i++)
+		{
+			int tx = x + dx[i];
+			int ty = y + dy[i];
+			if (tx < 1 || tx > n || ty <1 || ty > m || vis[tx][ty] != 0 || maze[tx][ty] != ch)
+			{
+				continue;
+			}
+			int num = check(tx, ty,ch);
+			if (num <= 1)
+			{
+				return;
+			}
+			vis[tx][ty] = 1;
+			q.push(node(tx,ty));
+		}
+	}
+	cout << "Yes";
+	f = 1;
+}
+int main()
+{
+	cin >> n >> m;
+	int i = 0;
+	int j = 0;
+	for (i = 1; i <= n; i++)
+	{
+		cin >> maze[i] + 1;
+	}
+	for (i = 1; i <= n; i++)
+	{
+		for (j = 1; j <= m; j++)
+		{
+			if (vis[i][j] == 0)
+			{
+				bfs(i,j,maze[i][j]);
+				if (f)
+				{
+					return 0;
+				}
+			}
+		}
+	}
+	cout << "No";
+}
