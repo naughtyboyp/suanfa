@@ -1,0 +1,120 @@
+ 展开
+题目背景
+注意：本题为上古 NOIP 原题，不保证存在靠谱的做法能通过该数据范围下的所有数据。
+
+题目描述
+单词接龙是一个与我们经常玩的成语接龙相类似的游戏，现在我们已知一组单词，且给定一个开头的字母，要求出以这个字母开头的最长的“龙”（每个单词都最多在“龙”中出现两次），在两个单词相连时，其重合部分合为一部分，例如 beast 和 astonish，如果接成一条龙则变为 beastonish，另外相邻的两部分不能存在包含关系，例如 at 和 atide 间不能相连。
+
+输入格式
+输入的第一行为一个单独的整数 nn 表示单词数，以下 nn 行每行有一个单词，输入的最后一行为一个单个字符，表示“龙”开头的字母。你可以假定以此字母开头的“龙”一定存在。
+
+输出格式
+只需输出以此字母开头的最长的“龙”的长度。
+
+输入输出样例
+输入 #1复制
+5
+at
+touch
+cheat
+choose
+tact
+a
+输出 #1复制
+23
+说明/提示
+样例解释：连成的“龙”为 atoucheatactactouchoose。
+
+n \le 20n≤20
+
+
+
+#include <stdio.h>
+#include <string.h>
+#include<iostream>
+#include<algorithm>
+#include<string>
+#include<cmath>
+#include<queue>
+#include<map>
+#pragma warning(disable:4996)
+using namespace std;
+typedef long long ll;
+const int inf = 0x3f3f3f3f;
+int ans = -inf;
+int n = 0;
+int vis[100];
+string s[100];
+string sbeging;
+int check(string s, string m, int len)
+{
+	int lens = s.length();//s的末尾
+	if (lens - len < 0)//防止s边界溢出  
+	{
+		return 0;
+	}
+	int i = 0;
+	for (i = 0; i < len; i++)//逐个匹配
+	{
+		if (s[lens - len + i] != m[i])
+		{
+			return 0;
+		}
+	}
+	return 1;
+}
+void add(string& s, string m, int len)
+{
+	int i = 0;
+	int temp = m.length();
+	for (i = len; i < temp; i++)
+	{
+		s += m[i];
+	}
+}
+void dfs(string now)
+{
+	int len = now.length();//当前字符串长度
+	ans = max(ans, len);//记录最大值
+	int i = 0;
+	int j = 0;
+	for (i = 1; i <= n; i++)//与n个单词匹配
+	{
+		if (vis[i] >= 2)//使用超2次
+		{
+			continue;
+		}
+		int lenmax = s[i].length();//最长匹配长度
+		for (j = 1; j <= lenmax; j++)//匹配长度越短越好
+		{
+			if (check(now, s[i], j))//判定两个字符串是否匹配
+			{
+				
+				string temp = now;//维护now字符串
+				add(temp, s[i],j);//加上
+				if (temp == now)//无效添加
+				{
+					continue;
+				}
+				vis[i]++;//使用次数++
+				dfs(temp);//继续添加
+				vis[i]--;//回溯
+				
+			}
+		}
+
+	}
+}
+int main()
+{
+	
+	cin >> n;
+	int i = 0;
+	for (i = 1; i <= n; i++)
+	{
+		cin >> s[i];//输入单词组
+	}
+	cin >> sbeging;//输入开头
+	dfs(sbeging);//从头开始
+	cout << ans;
+}
