@@ -1,0 +1,141 @@
+在一个长方形框子里，最多有 NN 个相异的点，在其中任何一个点上放一个很小的油滴，那么这个油滴会一直扩展，直到接触到其他油滴或者框子的边界。必须等一个油滴扩展完毕才能放置下一个油滴。那么应该按照怎样的顺序在这 NN 个点上放置油滴，才能使放置完毕后所有油滴占据的总体积最大呢？（不同的油滴不会相互融合）
+
+注：圆的面积公式 V = \pi r^2V=πr 
+2
+ ，其中 rr 为圆的半径。
+
+输入格式
+第一行，一个整数 NN。
+
+第二行，四个整数 x, y, x', y'x,y,x 
+′
+ ,y 
+′
+ ，表示长方形边框一个顶点及其对角顶点的坐标。
+
+接下来 NN 行，第 ii 行两个整数 x_i, y_ix 
+i
+​
+ ,y 
+i
+​
+ ，表示盒子内第 ii 个点的坐标。
+
+输出格式
+一行，一个整数，长方形盒子剩余的最小空间（结果四舍五入输出）。
+
+输入输出样例
+输入 #1复制
+2
+20 0 10 10
+13 3
+17 7
+输出 #1复制
+50
+说明/提示
+对于 100\%100% 的数据，1 \le N \le 61≤N≤6，坐标范围在 [-1000, 1000][−1000,1000] 内。
+
+#include <stdio.h>
+#include <string.h>
+#include<iostream>
+#include<algorithm>
+#include<string>
+#include<cmath>
+#include<queue>
+#include<map>
+#pragma warning(disable:4996)
+using namespace std;
+/*油滴扩展  dfs出所有油滴顺序
+然后记录每种顺序的面积  取最小值
+突破口在于 求出每个油滴扩展后的半径
+半径取决于 边界，和其他已扩展油滴  注意有特判，如果被其他油滴覆盖，则起半径为0
+
+学习到  四舍五入大法
+其最后结果+0.5  然后取int 即可*/
+typedef long long ll;
+const int inf = 0x3f3f3f3f;
+const double pi = 3.1415926;
+struct point//油滴坐标，半径，面积
+{
+	double x;
+	double y;
+	double r;
+	double s;
+
+}node[10];
+int vis[10];//标记
+int n = 0;
+double sx, sy, ex, ey;
+double minS = inf;
+
+double dis(double x1, double y1, double x2, double y2)//两点间距离
+{
+	double x = abs(x1 - x2);
+	double y = abs(y1 - y2);
+	return sqrt(x * x + y * y);
+}
+
+double get(double x, double y)//得到油滴 x,y的半径
+{
+	double r = inf;
+	r = min(fabs(x - sx),fabs( x - ex));
+	r = min(r, min(fabs(y - sy), fabs(y - ey)));//半径为边界最小值
+	int i = 0;
+	double ans = r;//记录最小半径，半径与已扩展油滴
+	for (i = 0; i < n; i++)
+	{
+		if (vis[i] == 1)//说明已经扩展
+		{
+			double d = dis(x, y, node[i].x, node[i].y);//两点之间的距离
+			double temp = d - node[i].r;//最大半径
+			if (temp <= 0)//被覆盖
+			{
+				ans = min(ans, 0.0);
+			}
+			else
+			{
+				ans = min(ans, temp);
+			}
+		}
+	}
+	return ans;//返回半径
+}
+
+void dfs(int num, double sum)//sum,记录油滴面积总和
+{
+	if (num == n + 1)//n个点都扩展结束，记录最小面积
+	{
+		double S = (double)(abs(sx - ex) * abs(sy - ey)) - sum;//油
+		minS = min(minS, S);
+		return;
+	}
+	int i = 0;
+	for (i = 0; i < n; i++)//开始扩展油滴
+	{
+		if (vis[i] == 0)
+		{
+			node[i].r = get(node[i].x, node[i].y);//油滴半径
+			node[i].s = pi * node[i].r * node[i].r;//油滴面积
+			vis[i] = 1;//已扩展
+			dfs(num + 1, sum + node[i].s);
+			node[i].r = 0;//回溯
+			node[i].s = 0;
+			vis[i] = 0;
+		}
+	}
+}
+
+
+int main()
+{
+	cin >> n;//输入点的个数
+	int i = 0;
+	cin >> sx >> sy >> ex >> ey;
+	for (i = 0; i < n; i++)//输入油滴坐标
+	{
+		cin >> node[i].x >> node[i].y;
+	}
+	dfs(1,0);
+	minS += 0.5;//四舍五入大法
+	printf("%d", (int)minS);
+}
