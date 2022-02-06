@@ -1,0 +1,100 @@
+题目描述
+Farmer John 建造了一个有 NN(22 \le≤ NN \le≤ 100000100000) 个隔间的牛棚，这些隔间分布在一条直线上，坐标是 x_1x 
+1
+​
+  ,...,x_Nx 
+N
+​
+  (0 \le≤ x_ix 
+i
+​
+  \le≤ 10000000001000000000)。
+
+他的 CC(22 \le≤ CC \le≤ NN) 头牛不满于隔间的位置分布，它们为牛棚里其他的牛的存在而愤怒。为了防止牛之间的互相打斗，Farmer John 想把这些牛安置在指定的隔间，所有牛中相邻两头的最近距离越大越好。那么，这个最大的最近距离是多少呢？
+
+输入格式
+第 11 行：两个用空格隔开的数字 NN 和 CC。
+
+第 22 ~ N+1N+1 行：每行一个整数，表示每个隔间的坐标。
+
+输出格式
+输出只有一行，即相邻两头牛最大的最近距离。
+
+输入输出样例
+输入 #1复制
+5 3
+1 
+2 
+8 
+4 
+9 
+ 
+输出 #1复制
+3
+
+#include <stdio.h>
+#include <string.h>
+#include<iostream>
+#include<algorithm>
+#include<string>
+#include<cmath>
+#include<queue>
+#include<map>
+#pragma warning(disable:4996)
+using namespace std;
+typedef long long ll;
+const int inf = 0x3f3f3f3f;
+const int N = 1000005;
+int n = 0;
+int c = 0;
+int a[N];
+int check(int mid)
+{
+	int l = 0;
+	int r = 1;
+	int num = 0;
+	while (r<n)
+	{
+		if (a[r] - a[l] >= mid)
+		{
+			num++;
+			if (num == c - 1)
+			{
+				return 1;
+			}
+			l = r;
+			r = l + 1;
+		}
+		else
+		{
+			r++;
+		}
+	}
+	return 0;
+}
+int main()
+{
+	cin >> n >> c;
+	int i = 0;
+	for (i = 0; i < n; i++)
+	{
+		cin >> a[i];
+	}
+	sort(a, a + n);
+	int l = 0;
+	int r = 1e9+5;
+	while (l + 1 < r)
+	{
+		int mid = (l + r) >> 1;
+		if (check(mid))
+		{
+			l = mid;
+		}
+		else
+		{
+			r = mid;
+		}
+	}
+	cout << l;
+
+}
