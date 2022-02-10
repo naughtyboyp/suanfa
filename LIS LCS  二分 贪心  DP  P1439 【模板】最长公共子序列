@@ -1,0 +1,105 @@
+题目描述
+给出 1,2,\ldots,n1,2,…,n 的两个排列 P_1P 
+1
+​
+  和 P_2P 
+2
+​
+  ，求它们的最长公共子序列。
+
+输入格式
+第一行是一个数 nn。
+
+接下来两行，每行为 nn 个数，为自然数 1,2,\ldots,n1,2,…,n 的一个排列。
+
+输出格式
+一个数，即最长公共子序列的长度。
+
+输入输出样例
+输入 #1复制
+5 
+3 2 1 4 5
+1 2 3 4 5
+输出 #1复制
+3
+说明/提示
+对于 50\%50% 的数据， n \le 10^3n≤10 
+3
+ ；
+对于 100\%100% 的数据， n \le 10^5n≤10 
+5
+ 。
+ 
+ #include <stdio.h>
+#include <string.h>
+#include<iostream>
+#include<algorithm>
+#include<string>
+#include<cmath>
+#include<queue>
+#include<map>
+#pragma warning(disable:4996)
+using namespace std;
+typedef long long ll;
+/*1.最长公共子序列的长度  LCS
+
+1.n*n DP  dp[i][j]  = if(a[i] == b[j]) {  dp[i][j] = dp[i-1][j-1] +1 };
+		else max(dp[i-1][j], dp[i][j-1]);
+
+2.根据本题的特殊性  无重复元素
+LCS 与  LIS 可以相互转化
+
+求 A 的 LIS长度    二分+贪心(n*logn)
+可转化为
+  A 与 {1,2...,n} 的LCS
+
+反之求  A  与  B  的LCS
+也可转化为
+求  T  的LIS
+T数组肯定都是A与B的子序列
+
+因为T数组是单调递增的  内容是B数组元素在A数组的下标
+在A数组中下标递增 证明  T数组肯定是A的子序列
+
+B数组则是按顺序填入，肯定是B的子序列
+
+
+那么表示A中的序号递增就表示这个递增的序列就是A的子序列， 并且我们在B中一直的顺序遍历（从前向后）那么显然这个序列也是B的子序列， 那么这个序列就是A,B公共子序列，
+
+LIS长度的求解方法：1.DP
+		2. 二分+ 贪心  仅仅是求长度！！！！  */
+const int inf = 0x3f3f3f3f;
+const int N = 1e5 + 5;
+int a[N];
+int c[N];
+int t[N];
+int len = 0;
+int main()
+{
+	int n = 0;
+	cin >> n;
+	int i = 0;
+	for (i = 1; i <= n; i++)
+	{
+		cin >> a[i];
+	}
+	for (i = 1; i <= n; i++)
+	{
+		int x = 0;
+		cin >> x;
+		c[x] = i;
+	}
+	for (i = 1; i <= n; i++)
+	{
+		if (c[a[i]] > t[len])
+		{
+			t[++len] = c[a[i]];
+			continue;
+		}
+		int index = lower_bound(t + 1, t + len + 1, c[a[i]]) - t;
+		t[index] = c[a[i]];
+	}
+
+
+
+}
